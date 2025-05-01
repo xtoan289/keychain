@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu đơn hàng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fffdf7;
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .order-status-container {
+            background-color: #fffaf6;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #ff6b81;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-form label {
+            font-weight: bold;
+            color: #e44d26;
+        }
+
+        .search-form input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 0.4rem;
+            font-size: 1rem;
+        }
+
+        .search-form button {
+            background-color: #ff6b81;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-form button:hover {
+            background-color: #ff1493;
+        }
+
+        .order-details {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #ffecec;
+            border-radius: 0.8rem;
+            border: 1px solid #ffc0cb;
+        }
+
+        .order-details h2 {
+            color: #ff6b81;
+            margin-bottom: 1rem;
+        }
+
+        .order-details p {
+            margin-bottom: 0.8rem;
+        }
+
+        .order-details strong {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="order-status-container">
+        <h1>Tra cứu thông tin đơn hàng</h1>
+        <div class="search-form">
+            <label for="orderId">Nhập mã đơn hàng:</label>
+            <input type="text" id="orderId" name="orderId" placeholder="VD: KC-xxxx-XXXXX" required>
+            <button onclick="displayOrderDetails()">Tra cứu</button>
+        </div>
+
+        <div id="orderDetails" class="order-details" style="display: none;">
+            <h2>Thông tin đơn hàng:</h2>
+            <div id="orderInfo">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript
+        function displayOrderDetails() {
+            const orderIdInput = document.getElementById('orderId');
+            const orderId = orderIdInput.value.trim().toUpperCase();
+
+            if (!orderId) {
+                alert('Vui lòng nhập mã đơn hàng.');
+                return;
+            }
+
+            let allOrders = [];
+
+            // Lấy dữ liệu từ localStorage
+            const veOrders = localStorage.getItem('veOrders');
+            if (veOrders) {
+                allOrders = allOrders.concat(JSON.parse(veOrders));
+            }
+
+            const thietKeOrders = localStorage.getItem('thietKeOrders');
+            if (thietKeOrders) {
+                allOrders = allOrders.concat(JSON.parse(thietKeOrders));
+            }
+
+            const thanhToanOrders = localStorage.getItem('thanhToanOrders');
+            if (thanhToanOrders) {
+                allOrders = allOrders.concat(JSON.parse(thanhToanOrders));
+            }
+
+            const hopTacRequests = localStorage.getItem('hopTacRequests');
+            if (hopTacRequests) {
+                allOrders = allOrders.concat(JSON.parse(hopTacRequests));
+            }
+
+            const order = allOrders.find(order => order.orderId === orderId || order.requestId === orderId);
+
+            const orderDetailsDiv = document.getElementById('orderDetails');
+            const orderInfoDiv = document.getElementById('orderInfo');
+
+            if (order) {
+                let orderInfoHTML = '';
+
+                if (order.type === 've') {
+                    orderInfoHTML += `<p><strong>Loại đơn hàng:</strong> Vé Workshop</p>`;
+                    orderInfoHTML += `<p><strong>Mã đơn hàng:</strong> ${order.orderId}</p>`;
+                    orderInfoHTML += `<p><strong>Họ và tên:</strong> ${order.info.hoTen}</p>`;
+                    orderInfoHTML += `<p><strong>Email:</strong> ${order.info.email}</p>`;
+                    orderInfoHTML += `<p><strong>Ngày tham gia:</strong> ${order.info.ngayThamGia}</p>`;
+                    orderInfoHTML += `<p><strong>Gói tham gia:</strong> ${order.info.goiThamGia}</p>`;
+                    orderInfoHTML += `<p><strong>Số lượng:</strong> ${order.quantity}</p>`;
+                    orderInfoHTML += `<p><strong>Tổng tiền:</strong> ${order.price.toLocaleString('vi-VN')} VND</p>`;
+                    orderInfoHTML += `<p><strong>Phương thức thanh toán:</strong> ${order.info.phuongThucThanhToan}</p>`;
+
+                } else if (order.type === 'thietke') {
+                    orderInfoHTML += `<p><strong>Loại đơn hàng:</strong> Thiết kế riêng</p>`;
+                    orderInfoHTML += `<p><strong>Mã đơn hàng:</strong> ${order.orderId}</p>`;
+                    orderInfoHTML += `<p><strong>Tên khách hàng:</strong> ${order.ten}</p>`;
+                    orderInfoHTML += `<p><strong>Số điện thoại:</strong> ${order.sdt}</p>`;
+                    orderInfoHTML += `<p><strong>Địa chỉ:</strong> ${order.diachi}</p>`;
+                    orderInfoHTML += `<p><strong>Sản phẩm:</strong> ${order.sanPham}</p>`;
+                    orderInfoHTML += `<p><strong>Số lượng:</strong> ${order.soLuong}</p>`;
+                    orderInfoHTML += `<p><strong>Tổng tiền:</strong> ${order.tongTien.toLocaleString('vi-VN')} VND</p>`;
+
+                } else if (order.type === 'thanhtoan') {
+                    orderInfoHTML += `<p><strong>Loại đơn hàng:</strong> Thanh toán sản phẩm</p>`;
+                    orderInfoHTML += `<p><strong>Mã đơn hàng:</strong> ${order.orderId}</p>`;
+                    orderInfoHTML += `<p><strong>Tên người nhận:</strong> ${order.name}</p>`;
+                    orderInfoHTML += `<p><strong>Địa chỉ giao hàng:</strong> ${order.address}</p>`;
+                    orderInfoHTML += `<p><strong>Số điện thoại:</strong> ${order.phone}</p>`;
+                    orderInfoHTML += `<p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>`;
+                    orderInfoHTML += `<p><strong>Tổng tiền:</strong> ${order.totalAmount.toLocaleString('vi-VN')} VND</p>`;
+
+                } else if (order.type === 'hoptac') {
+                    orderInfoHTML += `<p><strong>Loại yêu cầu:</strong> Hợp tác</p>`;
+                    orderInfoHTML += `<p><strong>Mã yêu cầu:</strong> ${order.requestId}</p>`;
+                    orderInfoHTML += `<p><strong>Tên đơn vị:</strong> ${order.tenDonVi}</p>`;
+                    orderInfoHTML += `<p><strong>Người đại diện:</strong> ${order.nguoiDaiDien}</p>`;
+                    orderInfoHTML += `<p><strong>Email:</strong> ${order.email}</p>`;
+                    orderInfoHTML += `<p><strong>Số điện thoại:</strong> ${order.sdt}</p>`;
+                    orderInfoHTML += `<p><strong>Số lượng người tham gia dự kiến:</strong> ${order.soLuongThamGia}</p>`;
+                    orderInfoHTML += `<p><strong>Ngân sách dự kiến:</strong> ${order.nganSachDuKien || 'Chưa cung cấp'}</p>`;
+                }
+
+                orderInfoDiv.innerHTML = orderInfoHTML;
+                orderDetailsDiv.style.display = 'block';
+
+            } else {
+                orderInfoDiv.innerHTML = `<p>Không tìm thấy đơn hàng với mã: <strong>${orderId}</strong></p>`;
+                orderDetailsDiv.style.display = 'block';
+            }
+
+            orderIdInput.value = '';
+        }
+    </script>
+</body>
+
+</html>

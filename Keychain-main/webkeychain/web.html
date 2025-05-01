@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KEYCHAIN - Workshop Nhựa Co Nhiệt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* (Giữ nguyên CSS) */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #fffdf7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-header {
+            background: linear-gradient(to right, #ffdee9, #b5fffc);
+            display: flex;
+            align-items: center;
+            padding: 0.7rem 2vw;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b81;
+            gap: 0.5rem;
+            user-select: none;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.5rem;
+        }
+
+        .header-search-group {
+            flex: 1 1 280px;
+            display: flex;
+            align-items: center;
+            max-width: 390px;
+            min-width: 230px;
+        }
+
+        .header-search-group input[type="text"] {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem 0 0 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .header-search-group button {
+            background: #ff6b81;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.5rem 0.9rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-actions .btn-watched {
+            background: #ffa502;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .header-actions .hotline {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f76a6a;
+            margin-right: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-actions .hotline small {
+            font-weight: 400;
+            color: #333;
+        }
+
+        .header-actions .icon-link {
+            color: #333;
+            font-size: 1.25rem;
+            margin: 0 0.3rem;
+            transition: color 0.15s;
+            text-decoration: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .header-actions .icon-link:hover {
+            color: #ff6b81;
+        }
+
+        .header-actions .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6b81;
+            color: #fff;
+            font-size: 0.8rem;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-weight: bold;
+            border: 2px solid #fff;
+        }
+
+        .account-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.5rem 0;
+            display: none;
+            z-index: 100;
+            min-width: 120px;
+        }
+
+        .account-dropdown.active {
+            display: block;
+        }
+
+        .account-dropdown a,
+        .account-dropdown button {
+            display: block;
+            padding: 0.7rem 1rem;
+            text-decoration: none;
+            color: #333;
+            text-align: left;
+            border: none;
+            background: none;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .account-dropdown a:hover,
+        .account-dropdown button:hover {
+            background: #f0f0f0;
+        }
+
+        nav {
+            background: #fff;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 1.3rem;
+            list-style: none;
+            margin: 0;
+            padding: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-list>li {
+            position: relative;
+        }
+
+        .nav-list>li>a {
+            text-decoration: none;
+            color: #2d2d2d;
+            font-weight: 600;
+            font-size: 1.07rem;
+            padding: 7px 8px;
+            border-radius: 0.5rem;
+            transition: background 0.15s, color 0.15s;
+            display: inline-block;
+        }
+
+        .nav-list>li>a:hover,
+        .nav-list>li.active>a {
+            background: #ffdee9;
+            color: #ff6b81;
+        }
+
+        .nav-list li .dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            min-width: 180px;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            border-radius: 0 0 0.5rem 0.5rem;
+            z-index: 999;
+            margin-top: 2px;
+            padding: 0.3rem 0;
+        }
+
+        .nav-list li:hover .dropdown,
+        .nav-list li:focus-within .dropdown {
+            display: block;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.55rem 1.2rem;
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 0.25rem;
+            transition: background 0.1s, color 0 .1s;
+        }
+
+        .dropdown a:hover {
+            background: #ffdee9;
+            color: #ff6b81;
+        }
+
+        @media (max-width: 900px) {
+            .main-header {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: stretch;
+            }
+
+            .header-search-group {
+                max-width: none;
+            }
+
+            .header-actions {
+                justify-content: flex-start;
+            }
+
+            nav {
+                padding: 0 0.5rem;
+            }
+
+            .nav-list {
+                gap: 0.7rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .main-header {
+                padding: 0.7rem 1vw;
+            }
+
+            .header-search-group input[type="text"] {
+                font-size: 0.98rem;
+            }
+
+            .header-actions .btn-watched {
+                font-size: 0.9rem;
+                padding: 0.45rem 0.7rem;
+            }
+
+            .header-actions .hotline {
+                font-size: 0.98rem;
+            }
+
+            .nav-list>li>a {
+                font-size: 0.97rem;
+                padding: 7px 4px;
+            }
+
+            .dropdown a {
+                font-size: 0.95rem;
+                padding: 0.45rem 0.8rem;
+            }
+        }
+
+        /* STYLE PHẦN KHÁC */
+        .section {
+            padding: 2rem 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            color: #ff6b81;
+            margin-bottom: 1rem;
+        }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            overflow-x: visible;
+            scroll-snap-type: none;
+        }
+
+        .product-grid .card {
+            width: auto;
+            max-width: 200px;
+            flex-grow: 1;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 1rem;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 0.75rem;
+            max-width: 100%;
+        }
+
+        .btn {
+            background: #ff6b81;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-top: 1rem;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: #ffecec;
+            color: #555;
+        }
+
+        .image-container {
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="main-header">
+            <a href="/" class="logo">
+                <img src="https://scontent.fdad2-1.fna.fbcdn.net/v/t39.30808-6/491136367_122112770036821121_2934017208201932214_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=kcGJeO-YhIcQ7kNvwFCUi7G&_nc_oc=Adl9r7SaGuSIXZeY8p_Rb2qjqWHjKEHcs0bBcCkv-w6G1tg_ZA15eaelSBjBro9eTzSfQL6Pl6D0_RGopC33ViHz&_nc_zt=23&_nc_ht=scontent.fdad2-1.fna&_nc_gid=JvugNfOlvpC5EkVKjoS1wQ&oh=00_AfF89_un4IGLlA9Vx6RmNTY8oEfJjezFWo9rlRWko_3q4g&oe=6806FD8F"
+                    alt="KEYCHAIN">
+                NHỰA CO NHIỆT KEYCHAIN
+            </a>
+            <form class="header-search-group" action="timkiem.html">
+                <input type="text" name="q" placeholder="Bạn muốn tìm gì?">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+            <div class="header-actions">
+                <button class="btn-watched"><i class="fa fa-clock"></i> Đã xem</button>
+                <div class="hotline">
+                    094 331 68 98
+                    <small>Liên hệ</small>
+                </div>
+                <a href="donhang.html" id="account-link" class="icon-link" title="Đơn hàng">
+                    <i class="fa fa-shopping-bag"></i>
+                    Đơn hàng
+                </a>
+                <a href="donhang.html" id="check-order-link" class="icon-link" title="Kiểm tra đơn hàng">
+                    <i class="fa fa-search"></i>
+                    Kiểm tra đơn hàng
+                </a>
+                <a href="#" id="cart-link" class="icon-link" title="Giỏ hàng">
+                    <i class="fa fa-shopping-bag"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="nav-list">
+                <li class="active"><a href="web.html">TRANG CHỦ</a></li>
+                <li>
+                    <a href="#">WORKSHOP <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                    <div class="dropdown">
+                        <a id="go-to-workshop" href="ve.html">Đăng ký Workshop</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#">SẢN PHẨM <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                    <div class="dropdown">
+                        <a href="sanpham.html">Móc khoá cá nhân hoá</a>
+                        <a href="sanpham.html">Nam châm trang trí</a>
+                        <a href="sanpham.html">Sticker dán laptop</a>
+                        <a href="sanpham.html">Màu vẽ đi kèm</a>
+                        <a href="sanpham.html">Máy khò co nhiệt</a>
+                        <a href="sanpham.html">Miếng nhựa co nhiệt</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#">THIẾT KẾ RIÊNG<i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                    <div class="dropdown">
+                        <a id="go-to-thietke-finish" class="design-link-redirect" href="thietke.html?type=finish">Gửi thiết kế – nhận thành phẩm</a>
+                        <a id="go-to-thietke-combo" class="design-link-redirect" href="thietke.html?type=combo">Combo thiết kế + DIY</a>
+                    </div>
+                </li>
+                <li><a href="hoptac.html">HỢP TÁC</a></li>
+                <li><a href="#lien-he">LIÊN HỆ</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="section">
+        <h2>🧸 Sản phẩm sẵn có</h2>
+        <div class="product-grid">
+            <div class="card">
+                <img src="https://i.ytimg.com/vi/B3wi7Y5VKwo/maxresdefault.jpg">
+                <p>Móc khoá cá nhân hoá</p>
+                <a class="btn product-link" href="sanpham.html">Xem ngay</a>
+            </div>
+            <div class="card">
+                <img
+                    src="https://dosi-in.com/file/detailed/225/dosiin-saigonir-nam-cham-nhua-deo-hit-dan-trang-tri-tu-lanh-saigonir-hinh-anh-combo-banh-mi-cafe225549.jpg?w=1000&h=1000&fit=fill&fm=webp">
+                <p>Nam châm trang trí</p>
+                <a class="btn product-link" href="sanpham.html">Xem ngay</a>
+            </div>
+            <div class="card">
+                <img src="https://down-vn.img.susercontent.com/file/sg-11134201-7rd5r-lwtv9cjzi0ii34">
+                <p>Nhãn dán laptop dễ thương</p>
+                <a class="btn product-link" href="sanpham.html">Xem ngay</a>
+            </div>
+            <div class="card">
+                <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQixRq0drEXesvlOs953a7uFRU1hlAhNha0Je3LiAMOjpn7bROMLA&s=10&ec=72940544">
+                <p>Màu vẽ đikèm</p>
+                <a class="btn product-link" href="sanpham.html">Xem ngay</a>
+            </div>
+            <div class="card">
+                <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlwpy_fzZFMVLWhWMyMuAPOPVoYii7QJa3RXHSZOljhwFqBuZQHA&s=10&ec=72940544">
+                <p>Máy khò co nhiệt</p><a class="btn product-link" href="sanpham.html">Xem ngay</a>
+            </div>
+            <div class="card">
+                <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8U0yTI90N86dAUONEccpb52jNF6VXy_ASHI855cHDlx0aTH131g&s=10&ec=72940544">
+                <p>Miếng nhựa co nhiệt</p>
+                <a class="btn product-link" href="sanpham.html">Xem ngay</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🎫 Đăng ký tham gia Workshop</h2>
+        <p>Tham gia buổi workshop để tự tay tạo ra sản phẩm cá nhân hoá siêu đáng yêu!</p>
+        <a class="btn workshop-link" id="book-workshop-btn" href="ve.html" target="_blank">Đặt vé ngay</a>
+    </section>
+
+    <section class="section">
+        <h2>🎁 Sản phẩm thiết kế riêng</h2>
+        <div class="product-grid">
+            <div class="card"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDj1jdx9GffVLfzkUFTZtEhE5qQbmJlVQ02vS2hMdpXHf1UOxMCA&s=10&ec=72940544">
+                <p>Gửi thiết kế – nhận thành phẩm</p><a class="btn design-link design-link-redirect" href="thietke.html?type=finish">Xem
+                    ngay</a>
+            </div>
+            <div class="card"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-e6nY_3tMG-RJC5qNoEPf1HR499kTV9YIN_4URyMbJ1vyzMmeng&s=10&ec=72940544">
+                <p>Combo thiết kế + DIY tại nhà</p><a class="btn design-link design-link-redirect" href="thietke.html?type=combo">Xem ngay</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🏫 Hợp tác tổ chức sự kiện ngoại khoá</h2>
+        <p>Dành cho các trường học, cơ sở giáo dục, CLB nghệ thuật – tổ chức sự kiện sáng tạo mang tính giáo dục và thực hành
+            cao.</p>
+        <div class="image-container">
+            <img src="https://lh7-us.googleusercontent.com/wAX43GMHLtNzb2ApDB1y4J-SLrhffAsRVKdIRoagYVSyrMFobqa5z4iTSMMarSnq7Cz5TiUNoYNnw1KezIUQ6fyUXtatSESzxahsJLYG1TuFlI9S5cWYARsQjAR51ofnbHvHjWpxLLX9gsDvrV8JF4Q" alt="Sự kiện ngoại khóa">
+            <a class="btn hoptac-link hoptac-link-redirect" href="hoptac.html" target="_blank">Hợp tác ngay</a>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🎨 Thành quả sau Workshop</h2>
+        <p>Khám phá một số sản phẩm siêu đáng yêu do chính tay các bạn tham gia làm ra nè!</p>
+        <div class="product-grid">
+            <div class="card"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5qGqwRI_ki8ePr_W0xOL6iwV9vPuxWeD7pOzfFecT_0RsW0-kqA&s=10&ec=72940544"
+                    alt="Sản phẩm 1">
+            </div>
+            <div class="card"><img
+                    src="https://bizweb.dktcdn.net/100/364/149/files/dsc04985-55047c09-68d2-4b42-acec-a348ddb92443-6314242e-15a4-4c53-abee-df73e42ea2c0.jpg?v=1628738891255"
+                    alt="Sản phẩm 2">
+            </div>
+            <div class="card"><img src="https://i.ytimg.com/vi/gdkiPYYm9Io/maxresdefault.jpg" alt="Sản phẩm 3"></div>
+            <div class="card"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG3sNzziY0BljK4Z5Z0HhebtcQEW25-C-9CkKM7kZiX_4AwdljmZKrlnLn1KAnDjg84aw&usqp=CAU"
+                    alt="Sản phẩm 4">
+            </div>
+
+            <div class="card"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbgddTB1yV7lpS3osje_4posHHvveopwmHwSHD2Q9KX6qqoGfT2A&s&ec=72940544"
+                    alt="Sản phẩm 5">
+            </div>
+            <div class="card"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFGkmcFtA_HnP91-nfNq19AKtXJb_UQqDV87Suu0oeAatUk2lMvg&s=10&ec=72940544"
+                    alt="Sản phẩm 6">
+            </div>
+            <div class="card"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLjnRG9g9xh3hpUc-ypnCBlUVyfjV07xdEWJbNOgGMmrbAwjZxQA&s=10&ec=72940544"
+                    alt="Sản phẩm 7">
+            </div>
+            <div class="card"><img
+                    src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcThL22lic2EYYAV2paGAdzSyexZb-a6Rzut6WFtiKB_hP-fpESjlzHWd9q9CdG1KpWfQAmjYfm1gcRw90KpEbH8cKEKdY7IwhNiYSfVLfAU&usqp=CAc"
+                    alt="Sản phẩm 8">
+            </div>
+    </section>
+
+    <footer>
+        <p><strong>Liên hệ với chúng tôi:</strong></p>
+        <p>
+            📍 Địa chỉ: Ngũ Hành Sơn, Đà Nẵng<br>
+            📞 Đường dây nóng: <a href="tel:0943316898">094 331 68 98</a><br>
+            📧 Email: <a href="mailto:Keychainnhuaconhiet@gmail.com">Keychainnhuaconhiet@gmail.com</a><br>
+            🔗 Facebook: <a href="https://www.facebook.com/profile.php?id=61574633640361&locale=vi_VN"
+                target="_blank">Fanpage KEYCHAIN</a><br>
+            🎵 TikTok: <a href="https://www.tiktok.com/@mockhoaconhiet_keychain"
+                target="_blank">@mockhoaconhiet_keyCHAIN</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartLink = document.getElementById('cart-link');
+            const accountLink = document.getElementById('account-link');
+            const checkOrderLink = document.getElementById('check-order-link'); // Thêm dòng này
+            const productLinks = document.querySelectorAll('.product-link');
+            const designLinks = document.querySelectorAll('.design-link-redirect');
+            const bookWorkshopBtn = document.getElementById('book-workshop-btn');
+            const hoptacLink = document.querySelector('.hoptac-link-redirect');
+
+            // Chuyển hướng đến trang donhang.html khi click vào "Đơn hàng"
+            accountLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                window.location.href = 'donhang.html';
+            });
+
+            // Chuyển hướng đến trang donhang.html khi click vào "Kiểm tra đơn hàng"
+            checkOrderLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                window.location.href = 'donhang.html';
+            });
+
+            // Các nút còn lại chỉ cần chuyển hướng trực tiếp
+            cartLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                window.location.href = 'giohang.html';
+            });
+
+            productLinks.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    window.location.href = this.getAttribute('href');
+                });
+            });
+
+            designLinks.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    window.location.href = this.getAttribute('href');
+                });
+            });
+
+            if (bookWorkshopBtn) {
+                bookWorkshopBtn.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    window.location.href = 've.html';
+                });
+            }
+
+            if (hoptacLink) {
+                hoptacLink.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    window.location.href = 'hoptac.html';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

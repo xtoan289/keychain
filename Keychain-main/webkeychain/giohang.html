@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng của bạn</title>
+    <link rel="stylesheet" href="giohang.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-pink-100 font-inter">
+    <div class="container mx-auto mt-10 p-6 rounded-lg shadow-md bg-white">
+        <h1 class="text-3xl font-semibold text-pink-600 text-center mb-8">Giỏ hàng của bạn</h1>
+        <div id="cart-items" class="space-y-4">
+        </div>
+        <div class="cart-summary mt-8 pt-4 border-t border-gray-200 flex justify-between items-center">
+            <p class="text-lg font-semibold text-gray-700">Tổng cộng: <span id="total-price" class="text-xl text-pink-600">0 VNĐ</span></p>
+            <button id="checkout-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-75 transition-colors duration-200">
+                Mua hàng
+            </button>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const cartItemsContainer = document.getElementById('cart-items');
+    const totalPriceElement = document.getElementById('total-price');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    // Hàm để lấy giỏ hàng từ Local Storage
+    function getCart() {
+        const cartData = localStorage.getItem('cart');
+        return cartData ? JSON.parse(cartData) : [];
+    }
+
+    // Hàm để lưu giỏ hàng vào Local Storage
+    function saveCart(cart) {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartDisplay();
+    }
+
+    // Hàm để hiển thị các sản phẩm trong giỏ hàng
+    function updateCartDisplay() {
+        const cart = getCart();
+        cartItemsContainer.innerHTML = ''; // Xóa nội dung cũ
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">Giỏ hàng của bạn đang trống.</p>';
+            totalPriceElement.textContent = '0 VNĐ';
+            checkoutBtn.disabled = true;
+            checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            return;
+        } else {
+            checkoutBtn.disabled = false;
+            checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        let total = 0;
+        cart.forEach(item => {
+            const cartItemDiv = document.createElement('div');
+            cartItemDiv.classList.add('cart-item', 'flex', 'items-center', 'justify-between', 'border-b', 'border-gray-200', 'pb-4');
+
+            const img = document.createElement('img');
+            img.src = item.image;
+            img.alt = item.name;
+            img.classList.add('w-20', 'h-20', 'rounded-md', 'object-cover');
+
+            const detailsDiv = document.createElement('div');
+            detailsDiv.classList.add('item-details', 'flex-grow', 'ml-4');
+            detailsDiv.innerHTML = `
+                <h4 class="text-md font-semibold text-gray-800">${item.name}</h4>
+                <p class="text-sm text-gray-600">Giá: ${item.price.toLocaleString('vi-VN')} VNĐ</p>
+            `;
+
+            const quantityControls = document.createElement('div');
+            quantityControls.classList.add('quantity-controls', 'flex', 'items-center');
+            quantityControls.innerHTML = `
+                <button class="decrease-btn bg-pink-100 hover:bg-pink-200 text-pink-600 font-semibold rounded-l-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-75 transition-colors duration-200">-</button>
+                <span class="text-md font-semibold text-gray-700 min-w-[2rem] text-center">${item.quantity}</span>
+                <button class="increase-btn bg-pink-100 hover:bg-pink-200 text-pink-600 font-semibold rounded-r-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-75 transition-colors duration-200">+</button>
+            `;
+
+            const removeButton = document.createElement('button');
+            removeButton.classList.add('remove-btn', 'text-gray-500', 'hover:text-red-500', 'font-semibold', 'transition-colors', 'duration-200', 'focus:outline-none');
+            removeButton.textContent = 'Xóa';
+            removeButton.addEventListener('click', () => removeItem(item.id));
+
+            const itemRow = document.createElement('div');
+            itemRow.classList.add('flex', 'items-center', 'justify-between', 'w-full');
+            itemRow.appendChild(img);
+            itemRow.appendChild(detailsDiv);
+            itemRow.appendChild(quantityControls);
+            itemRow.appendChild(removeButton);
+            cartItemsContainer.appendChild(itemRow);
+
+            total += item.price * item.quantity;
+
+            // Thêm event listeners cho nút tăng giảm số lượng
+            const decreaseBtn = quantityControls.querySelector('.decrease-btn');
+            const increaseBtn = quantityControls.querySelector('.increase-btn');
+            const quantitySpan = quantityControls.querySelector('span');
+
+            decreaseBtn.addEventListener('click', () => updateQuantity(item.id, -1, quantitySpan));
+            increaseBtn.addEventListener('click', () => updateQuantity(item.id, 1, quantitySpan));
+        });
+
+        totalPriceElement.textContent = `${total.toLocaleString('vi-VN')} VNĐ`;
+    }
+
+    // Hàm để tăng hoặc giảm số lượng sản phẩm
+    function updateQuantity(itemId, change, quantitySpan) {
+        const cart = getCart();
+        const itemIndex = cart.findIndex(item => item.id === itemId);
+
+        if (itemIndex !== -1) {
+            cart[itemIndex].quantity += change;
+            if (cart[itemIndex].quantity < 1) {
+                removeItem(itemId);
+                return;
+            }
+            quantitySpan.textContent = cart[itemIndex].quantity;
+            saveCart(cart);
+        }
+    }
+
+    // Hàm để xóa sản phẩm khỏi giỏ hàng
+    function removeItem(itemId) {
+        let cart = getCart();
+        cart = cart.filter(item => item.id !== itemId);
+        saveCart(cart);
+    }
+
+    // Xử lý sự kiện khi nhấp vào nút "Mua hàng"
+    checkoutBtn.addEventListener('click', () => {
+        // Bạn có thể thực hiện các bước kiểm tra giỏ hàng trước khi chuyển trang
+        if (getCart().length > 0) {
+            window.location.href = 'thanhtoan.html';
+        } else {
+            alert('Giỏ hàng của bạn đang trống!');
+        }
+    });
+
+    // Gọi hàm để hiển thị giỏ hàng khi trang được tải
+    updateCartDisplay();
+});
+    </script>
+</body>
+</html>

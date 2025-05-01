@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            padding: 2rem;
+        }
+
+        .checkout-container {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #ff6ec7;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #e44d26;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 0.4rem;
+            box-sizing: border-box;
+        }
+
+        .payment-options {
+            margin-top: 1rem;
+        }
+
+        .payment-options h2 {
+            color: #e44d26;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .radio-group input[type="radio"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #orderConfirmation {
+            display: none;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #d4edda;
+            color: #0f5132;
+            border: 1px solid #badc76;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .order-id {
+            font-weight: normal;
+            font-size: 1rem;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+
+        #totalAmount {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff6ec7;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #thong_tin_chuyen_khoan {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        #thong_tin_chuyen_khoan p {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="checkout-container">
+        <h1>Thanh toán đơn hàng</h1>
+        <div id="totalAmount">
+            Tổng tiền: 0 VND
+        </div>
+        <form id="checkoutForm">
+            <div class="form-group">
+                <label for="name">Tên người nhận hàng:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Địa chỉ giao hàng:</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="phone">Số điện thoại:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group payment-options">
+                <h2>Phương thức thanh toán</h2>
+                <div class="radio-group">
+                    <input type="radio" id="thanh_toan_khi_nhan_hang" name="paymentMethod" value="COD" checked>
+                    <label for="thanh_toan_khi_nhan_hang">Thanh toán khi nhận hàng (COD)</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="thanh_toan_chuyen_khoan" name="paymentMethod" value="Bank">
+                    <label for="thanh_toan_chuyen_khoan">Chuyển khoản ngân hàng</label>
+                </div>
+                <div id="thong_tin_chuyen_khoan" style="display: none;">
+                    <p><strong>Thông tin chuyển khoản:</strong></p>
+                    <p>Ngân hàng: [Tên ngân hàng]</p>
+                    <p>Số tài khoản: [Số tài khoản]</p>
+                    <p>Tên tài khoản: [Tên chủ tài khoản]</p>
+                    <p>Vui lòng ghi rõ mã đơn hàng khi chuyển khoản.</p>
+                </div>
+            </div>
+            <button type="submit">Hoàn tất thanh toán</button>
+        </form>
+    </div>
+
+    <div id="orderConfirmation">
+        Đơn hàng của bạn đã đặt thành công!<br>
+        Mã đơn hàng: <span id="orderId" class="order-id"></span>
+    </div>
+
+    <script>
+        const SHIPPING_FEE = 20000; // Phí ship cố định
+
+        function getTotalAmount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let total = 0;
+            for (let item of cart) {
+                total += item.price * item.quantity;
+            }
+            return total;
+        }
+
+        function generateOrderId() {
+            const timestamp = Date.now().toString(36);
+            const randomChars = Math.random().toString(36).substring(2, 7).toUpperCase();
+            return `KC-${timestamp}-${randomChars}`;
+        }
+
+        window.onload = function() {
+            const totalAmount = getTotalAmount() + SHIPPING_FEE;
+            document.getElementById('totalAmount').textContent = `Tổng tiền: ${totalAmount.toLocaleString('vi-VN')} VND (bao gồm phí ship ${SHIPPING_FEE.toLocaleString('vi-VN')} VND)`;
+
+            const thanhToanChuyenKhoanRadio = document.getElementById('thanh_toan_chuyen_khoan');
+            const thongTinChuyenKhoanDiv = document.getElementById('thong_tin_chuyen_khoan');
+
+            thanhToanChuyenKhoanRadio.addEventListener('change', function() {
+                thongTinChuyenKhoanDiv.style.display = this.checked ? 'block' : 'none';
+            });
+        }
+
+        document.getElementById('checkoutForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const subtotalAmount = getTotalAmount();
+            const totalAmount = subtotalAmount + SHIPPING_FEE; // Cộng phí ship
+            const cartItems = JSON.parse(localStorage.getItem('cart'));
+            const orderId = generateOrderId();
+
+            if (name && address && phone) {
+                document.querySelector('.checkout-container').style.display = 'none';
+                const orderConfirmationDiv = document.getElementById('orderConfirmation');
+                orderConfirmationDiv.style.display = 'block';
+                document.getElementById('orderId').textContent = orderId;
+
+                const orderDetails = {
+                    type: 'thanhtoan',
+                    orderId: orderId,
+                    name: name,
+                    address: address,
+                    phone: phone,
+                    paymentMethod: paymentMethod,
+                    totalAmount: totalAmount,
+                    cartItems: cartItems
+                };
+
+                let thanhToanOrders = localStorage.getItem('thanhToanOrders');
+                if (thanhToanOrders) {
+                    thanhToanOrders = JSON.parse(thanhToanOrders);
+                    thanhToanOrders.push(orderDetails);
+                } else {
+                    thanhToanOrders = [orderDetails];
+                }
+                localStorage.setItem('thanhToanOrders', JSON.stringify(thanhToanOrders));
+
+                console.log('Thông tin đơn hàng:', orderDetails);
+                localStorage.removeItem('cart');
+
+                alert(`Thanh toán thành công! Mã đơn hàng của bạn là: ${orderId}`);
+                window.location.href = 'web.html'; // Chuyển hướng sau khi thanh toán thành công
+            } else {
+                alert('Vui lòng nhập đầy đủ thông tin người nhận hàng.');
+            }
+        });
+    </script>
+</body>
+
+</html>

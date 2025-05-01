@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sản phẩm - KEYCHAIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #fffdf7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* HEADER */
+        .main-header {
+            background: linear-gradient(to right, #ffdee9, #b5fffc);
+            display: flex;
+            align-items: center;
+            padding: 0.7rem 2vw;
+            gap: 1rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b81;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.5rem;
+        }
+
+        .header-search-group {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            max-width: 390px;
+            min-width: 230px;
+        }
+
+        .header-search-group input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.5rem 0 0 0.5rem;
+            font-size: 1rem;
+            background: #fff;
+            outline: none;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .header-search-group button {
+            background: #ff6b81;
+            border: none;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-actions .btn-watched {
+            background: #ffa502;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .header-actions .hotline {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f76a6a;
+            margin-right: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-actions .hotline small {
+            font-weight: 400;
+            color: #333;
+        }
+
+        .header-actions .icon-link {
+            color: #333;
+            font-size: 1.25rem;
+            margin: 0 0.3rem;
+            transition: color 0.15s;
+            text-decoration: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .header-actions .icon-link:hover {
+            color: #ff6b81;
+        }
+
+        .header-actions .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6b81;
+            color: #fff;
+            font-size: 0.8rem;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-weight: bold;
+            border: 2px solid #fff;
+        }
+
+        nav {
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem 0;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03);
+            z-index: 10;
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-list li {
+            position: relative;
+        }
+
+        .nav-list li a {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            background-color: #f8f8f8;
+            line-height: 1.5;
+            font-weight: 600;
+            font-size: 1.07rem;
+        }
+
+        .nav-list li a:hover,
+        .nav-list li.active a {
+            background: #ffdee9;
+            color: #ff6b81;
+        }
+
+        .nav-list li .dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            min-width: 180px;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            border-radius: 0 0 0.5rem 0.5rem;
+            z-index: 999;
+            margin-top: 2px;
+            padding: 0.3rem 0;
+        }
+
+        .nav-list li:hover .dropdown,
+        .nav-list li:focus-within .dropdown {
+            display: block;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.55rem 1.2rem;
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 0.25rem;
+            transition: background 0.1s, color 0 .1s;
+        }
+
+        .dropdown a:hover {
+            background: #ffdee9;
+            color: #ff6b81;
+        }
+
+        @media (max-width: 900px) {
+            .main-header {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: stretch;
+            }
+
+            .header-search-group {
+                max-width: none;
+            }
+
+            .header-actions {
+                justify-content: flex-start;
+            }
+
+            nav {
+                padding: 0 0.5rem;
+            }
+
+            .nav-list {
+                gap: 0.7rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .main-header {
+                padding: 0.7rem 1vw;
+            }
+
+            .header-search-group input[type="text"] {
+                font-size: 0.98rem;
+            }
+
+            .header-actions .btn-watched {
+                font-size: 0.9rem;
+                padding: 0.45rem 0.7rem;
+            }
+
+            .header-actions .hotline {
+                font-size: 0.98rem;
+            }
+
+            .nav-list>li>a {
+                font-size: 0.97rem;
+                padding: 7px 4px;
+            }
+
+            .dropdown a {
+                font-size: 0.95rem;
+                padding: 0.45rem 0.8rem;
+            }
+        }
+
+        /* STYLE PHẦN SẢN PHẨM */
+        .section {
+            padding: 2rem 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            color: #ff6b81;
+            margin-bottom: 1rem;
+        }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 0.75rem;
+            cursor: pointer;
+        }
+
+        .card .product-info {
+            padding: 0.5rem 0;
+        }
+
+        .card .product-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+            cursor: pointer;
+        }
+
+        .card .product-price {
+            color: #ff6b81;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card .add-to-cart-btn {
+            background: #007bff;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .card .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .card .product-description {
+            text-align: left;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .card:hover .product-description {
+            display: block;
+        }
+
+        .btn {
+            background: #ff6b81;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-top: 1rem;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: #ffecec;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="main-header">
+            <a href="web.html" class="logo">
+                <img src="https://scontent.fdad2-1.fna.fbcdn.net/v/t39.30808-6/491136367_122112770036821121_2934017208201932214_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=kcGJeO-YhIcQ7kNvwFCUi7G&_nc_oc=Adl9r7SaGuSIXZeY8p_Rb2qjqWHjKEHcs0bBcCkv-w6G1tg_ZA15eaelSBjBro9eTzSfQL6Pl6D0_RGopC33ViHz&_nc_zt=23&_nc_ht=scontent.fdad2-1.fna&_nc_gid=JvugNfOlvpC5EkVKjoS1wQ&oh=00_AfF89_un4IGLlA9Vx6RmNTY8oEfJjezFWo9rlRWko_3q4g&oe=6806FD8F"
+                    alt="KEYCHAIN">
+                NHỰA CO NHIỆT KEYCHAIN
+            </a>
+
+            <form class="header-search-group" action="timkiem.html">
+                <input type="text" name="q" placeholder="Bạn muốn tìm gì?">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+
+            <div class="header-actions">
+                <button class="btn-watched"><i class="fa fa-clock"></i> Đã xem</button>
+                <div class="hotline">
+                    094 331 68 98
+                    <small>Liên hệ</small>
+                </div>
+                <a href="giohang.html" class="icon-link" title="Giỏ hàng">
+                    <i class="fa fa-shopping-bag"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul class="nav-list">
+            <li><a href="web.html">TRANG CHỦ</a></li>
+            <li>
+                <a href="#">HỘI THẢO <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                <div class="dropdown">
+                    <a href="ve.html">Đăng ký Workshop</a>
+                </div>
+            </li>
+            <li class="active">
+                <a href="#">SẢN PHẨM <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                <div class="dropdown">
+                    <a href="#moc-khoa">Móc khoá cá nhân hoá</a>
+                    <a href="#nam-cham">Nam châm trang trí</a>
+                    <a href="#sticker">Sticker dán laptop</a>
+                    <a href="#mau-ve">Màu vẽ đi kèm</a>
+                    <a href="#may-kho">Máy khò co nhiệt</a>
+                    <a href="#nhua-co-nhiet">Miếng nhựa co nhiệt</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">THIẾT KẾ RIÊNG <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                <div class="dropdown">
+                    <a href="thietke.html">Gửi thiết kế – nhận thành phẩm</a>
+                    <a href="thietke.html">Combo thiết kế + DIY</a>
+                </div>
+            </li>
+            <li><a href="hoptac.html">HỢP TÁC</a></li>
+            <li><a href="#lien-he">LIÊN HỆ</a></li> </ul> </nav>
+
+            <section class="section" id="moc-khoa">
+                <h2>🧸 Móc khoá</h2>
+                <div class="product-grid" id="moc-khoa-products"></div>
+            </section>
+            
+            <section class="section" id="nam-cham">
+                <h2>🎨 Nam châm</h2>
+                <div class="product-grid" id="nam-cham-products"></div>
+            </section>
+            
+            <section class="section" id="sticker">
+                <h2>📌 Sticker</h2>
+                <div class="product-grid" id="sticker-products"></div>
+            </section>
+            <section class="section" id="mau-ve">
+                <h2>🖍️ Màu vẽ</h2>
+                <div class="product-grid" id="mau-ve-products"></div>
+            </section>
+            
+            <section class="section" id="may-kho">
+                <h2>🔥 Máy khò</h2>
+                <div class="product-grid" id="may-kho-products"></div>
+            </section>
+            
+            <section class="section" id="nhua-co-nhiet">
+                <h2>✨ Nhựa co nhiệt</h2>
+                <div class="product-grid" id="nhua-co-nhiet-products"></div>
+            </section>
+            
+            <footer>
+                <p><strong>Liên hệ với chúng tôi:</strong></p>
+                <p>
+                    📍 Địa chỉ: Ngũ Hành Sơn, Đà Nẵng<br>
+                    📞 Đường dây nóng: <a href="tel:0943316898">094 331 68 98</a><br>
+                    📧 Email: <a href="mailto:Keychainnhuaconhiet@gmail.com">Keychainnhuaconhiet@gmail.com</a><br>
+                    🔗 Facebook: <a href="[https://www.facebook.com/profile.php?id=61574633640361&locale=vi_VN](https://www.facebook.com/profile.php?id=61574633640361&locale=vi_VN)"
+                        target="_blank">Fanpage KEYCHAIN</a><br>
+                    🎵 TikTok: <a href="[https://www.tiktok.com/@mockhoaconhiet_keychain](https://www.tiktok.com/@mockhoaconhiet_keychain)"
+                        target="_blank">@mockhoaconhiet_keyCHAIN</a>
+                </p>
+            </footer>
+            <script>
+                // Giỏ hàng (lưu tạm thời ở localStorage)
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+                // Hàm thêm sản phẩm vào giỏ hàng
+                function addToCart(name, price, image) {
+                    const existingProduct = cart.find(item => item.name === name);
+                    if (existingProduct) {
+                        existingProduct.quantity++;
+                    } else {
+                        cart.push({
+                            name,
+                            price,
+                            image,
+                            quantity: 1
+                        });
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartCount();
+                    alert(`Đã thêm ${name} vào giỏ hàng!`);
+                }
+            
+                // Hàm cập nhật số lượng sản phẩm trong giỏ hàng (hiển thị trên biểu tượng giỏ hàng)
+                function updateCartCount() {
+                    const cartCount = document.getElementById('cart-count');
+                    if (cartCount) {
+                        cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+                    }
+                }
+            
+                // Hàm hiển thị sản phẩm từ localStorage
+                function renderProducts() {
+                    const storedProducts = JSON.parse(localStorage.getItem('products')) || [];
+                    const categoriesDivs = {
+                        'Móc khoá': document.getElementById('moc-khoa-products'),
+                        'Nam châm': document.getElementById('nam-cham-products'),
+                        'Sticker': document.getElementById('sticker-products'),
+                        'Màu vẽ': document.getElementById('mau-ve-products'),
+                        'Máy khò': document.getElementById('may-kho-products'),
+                        'Miếng nhựa': document.getElementById('nhua-co-nhiet-products')
+                    };
+            
+                    // Xóa nội dung hiện tại của các category div
+                    Object.values(categoriesDivs).forEach(div => {
+                        div.innerHTML = '';
+                    });
+            
+                    if (storedProducts.length > 0) {
+                        storedProducts.forEach(product => {
+                            const card = document.createElement('div');
+                            card.classList.add('card');
+                            card.innerHTML = `
+                                <img src="${product.image}" alt="${product.name}">
+                                <div class="product-info">
+                                    <h3 class="product-name">${product.name}</h3>
+                                    <p class="product-price">${formatCurrency(product.price || 0)}</p>
+                                    <button class="add-to-cart-btn" data-name="${product.name}" data-price="${product.price || 0}" data-image="${product.image}">Thêm vào giỏ</button>
+                                </div>
+                                <p class="product-description">${product.description}</p>
+                            `;
+            
+                            const addToCartButton = card.querySelector('.add-to-cart-btn');
+                            addToCartButton.addEventListener('click', function() {
+                                const name = this.dataset.name;
+                                const price = parseFloat(this.dataset.price);
+                                const image = this.dataset.image;
+                                addToCart(name, price, image);
+                            });
+            
+                            if (categoriesDivs[product.type]) {
+                                categoriesDivs[product.type].appendChild(card);
+                            }
+                        });
+                    } else {
+                        Object.values(categoriesDivs).forEach(div => {
+                            div.innerHTML = '<p>Chưa có sản phẩm nào.</p>';
+                        });
+                    }
+                }
+            
+                function formatCurrency(number) {
+                    return number.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    });
+                }
+            
+                document.addEventListener('DOMContentLoaded', () => {
+                    renderProducts();
+                    updateCartCount();
+                });
+            </script>
+            </thân>
+            
+            </html>

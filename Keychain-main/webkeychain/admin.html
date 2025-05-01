@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị</title>
+    <style>
+        /* CSS cơ bản (giữ nguyên hoặc tùy chỉnh theo ý bạn) */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #ffe0f0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            border-bottom: 2px solid transparent;
+            color: #777;
+        }
+
+        .tab-button.active {
+            color: #ff69b4;
+            border-bottom: 2px solid #ff69b4;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form thêm sản phẩm */
+        .add-product-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .add-product-form input[type="text"],
+        .add-product-form input[type="number"],
+        .add-product-form select,
+        .add-product-form textarea,
+        .add-product-form input[type="file"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .add-product-form button {
+            background-color: #ff69b4;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .add-product-form button:hover {
+            background-color: #f0498a;
+        }
+
+        /* Bảng dữ liệu */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+
+        .product-image {
+            max-width: 50px;
+            height: auto;
+        }
+
+        .action-buttons button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Trang Quản Trị</h1>
+        <div class="tabs">
+            <button class="tab-button active" data-tab="products">Sản phẩm</button>
+            <button class="tab-button" data-tab="orders">Quản lý đơn hàng</button>
+            <button class="tab-button" data-tab="hoptac-requests">Yêu cầu Hợp tác</button>
+        </div>
+
+        <div id="products" class="tab-content active">
+            <h2>Quản lý Sản phẩm</h2>
+            <div id="add-product">
+                <h3>Thêm sản phẩm</h3>
+                <form id="add-product-form" class="add-product-form">
+                    <label for="product-name">Tên sản phẩm:</label>
+                    <input type="text" id="product-name" name="product-name" required>
+
+                    <label for="product-image">Hình ảnh:</label>
+                    <input type="file" id="product-image" name="product-image" accept="image/*">
+
+                    <label for="product-price">Giá:</label>
+                    <input type="number" id="product-price" name="product-price" min="0" value="0" required>
+
+                    <label for="product-quantity">Số lượng:</label>
+                    <input type="number" id="product-quantity" name="product-quantity" min="0" value="0" required>
+
+                    <label for="product-description">Mô tả:</label>
+                    <textarea id="product-description" name="product-description"></textarea>
+
+                    <label for="product-type">Loại sản phẩm:</label>
+                    <select id="product-type" name="product-type">
+                        <option value="Móc khoá">Móc khoá</option>
+                        <option value="Nam châm">Nam châm</option>
+                        <option value="Sticker">Sticker</option>
+                        <option value="Miếng nhựa">Miếng nhựa</option>
+                        <option value="Máy khò">Máy khò</option>
+                        <option value="Màu vẽ">Màu vẽ</option>
+                    </select>
+
+                    <button type="submit">Thêm sản phẩm</button>
+                </form>
+            </div>
+
+            <div id="manage-products">
+                <h3>Danh sách sản phẩm</h3>
+                <table id="product-table">
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Loại</th>
+                            <th>Số lượng</th>
+                            <th>Mô tả</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-list">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="orders" class="tab-content">
+            <h2>Quản lý Đơn hàng</h2>
+            <div id="ve-orders">
+                <h3>Đơn hàng Vé Workshop</h3>
+                <table id="ve-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn hàng</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Ngày tham gia</th>
+                            <th>Số người</th>
+                            <th>Gói tham gia</th>
+                            <th>Ý tưởng thiết kế</th>
+                            <th>Phương thức thanh toán</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ve-list">
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="thietke-orders">
+                <h3>Đơn hàng Thiết kế</h3>
+                <table id="thietke-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn hàng</th>
+                            <th>Tên</th>
+                            <th>SĐT</th>
+                            <th>Địa chỉ</th>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Gói</th>
+                            <th>Có máy khò</th>
+                            <th>Tổng tiền</th>
+                            <th>Mô tả thiết kế</th>
+                            <th>Phương thức thanh toán</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="thietke-list">
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="thanhtoan-orders">
+                <h3>Đơn hàng Thanh toán</h3>
+                <table id="thanhtoan-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn hàng</th>
+                            <th>Tên người nhận</th>
+                            <th>Địa chỉ</th>
+                            <th>SĐT</th>
+                            <th>Phương thức thanh toán</th>
+                            <th>Tổng tiền</th>
+                            <th>Sản phẩm</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="thanhtoan-list">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="hoptac-requests" class="tab-content">
+            <h3>Yêu cầu Hợp tác</h3>
+            <table id="hoptac-table">
+                <thead>
+                    <tr>
+                        <th>Mã yêu cầu</th>
+                        <th>Tên đơn vị</th>
+                        <th>Người đại diện</th>
+                        <th>Chức vụ</th>
+                        <th>Email</th>
+                        <th>SĐT</th>
+                        <th>Nội dung hợp tác</th>
+                        <th>Số lượng tham gia</th>
+                        <th>Ngân sách dự kiến</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="hoptac-list">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+       // Chuyển tab
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            button.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // *** Quản lý Sản phẩm ***
+
+    // Hàm lưu trữ tạm thời Data URL ảnh
+    let tempImageURL = '';
+
+    // Xử lý khi có file ảnh được chọn và chuyển sang Data URL
+    document.getElementById('product-image').addEventListener('change', function() {
+        const imageFile = this.files[0];
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                tempImageURL = reader.result; // Chứa Data URL
+            }
+            reader.readAsDataURL(imageFile); // Đọc file dưới dạng Data URL
+        } else {
+            tempImageURL = '';
+        }
+    });
+
+    // Thêm sản phẩm
+    document.getElementById('add-product-form').addEventListener('submit', handleAddProduct);
+
+    function handleAddProduct(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('product-name').value;
+        const price = parseFloat(document.getElementById('product-price').value);
+        const quantity = parseInt(document.getElementById('product-quantity').value);
+        const description = document.getElementById('product-description').value;
+        const type = document.getElementById('product-type').value;
+
+        const newProduct = {
+            id: Date.now(),
+            name: name,
+            image: tempImageURL, // Lưu Data URL
+            price: price,
+            quantity: quantity,
+            description: description,
+            type: type
+        };
+
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        products.push(newProduct);
+        localStorage.setItem('products', JSON.stringify(products));
+
+        renderProductList();
+        document.getElementById('add-product-form').reset();
+        tempImageURL = '';
+        const submitButton = document.querySelector('#add-product-form button[type="submit"]');
+        submitButton.textContent = 'Thêm sản phẩm';
+        const hiddenIdInput = document.getElementById('edit-product-id');
+        if (hiddenIdInput) {
+            hiddenIdInput.remove();
+        }
+        document.getElementById('add-product-form').removeEventListener('submit', handleEditSubmit);
+        document.getElementById('add-product-form').addEventListener('submit', handleAddProduct);
+    }
+
+    // Hiển thị danh sách sản phẩm (đã thêm giá)
+    function renderProductList() {
+        const productListElement = document.getElementById('product-list');
+        productListElement.innerHTML = '';
+
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+
+        products.forEach(product => {
+            const row = productListElement.insertRow();
+
+            const imageCell = row.insertCell();
+            imageCell.innerHTML = product.image ? `<img src="${product.image}" alt="${product.name}" class="product-image">` : '';
+
+            const nameCell = row.insertCell();
+            nameCell.textContent = product.name;
+
+            const priceCell = row.insertCell();
+            priceCell.textContent = product.price != null ? product.price : 'Chưa có'; // Hiển thị "Chưa có" nếu giá trị null
+
+            const typeCell = row.insertCell();
+            typeCell.textContent = product.type;
+
+            const quantityCell = row.insertCell();
+            quantityCell.textContent = product.quantity;
+
+            const descriptionCell = row.insertCell();
+            descriptionCell.textContent = product.description;
+
+            const actionsCell = row.insertCell();
+            actionsCell.classList.add('action-buttons');
+            actionsCell.innerHTML = `<button class="edit-button" data-id="${product.id}">Sửa</button>
+                                         <button class="delete-button" data-id="${product.id}">Xóa</button>`;
+        });
+
+        attachProductActionListeners();
+    }
+
+
+    // Gắn các bộ lắng nghe sự kiện cho nút xóa và sửa sản phẩm
+    function attachProductActionListeners() {
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const productIdToDelete = parseInt(this.getAttribute('data-id'));
+                deleteProduct(productIdToDelete);
+            });
+        });
+
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const productIdToEdit = parseInt(this.getAttribute('data-id'));
+                editProduct(productIdToEdit);
+            });
+        });
+    }
+
+    // Xóa sản phẩm
+    function deleteProduct(productId) {
+        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+            let products = JSON.parse(localStorage.getItem('products')) || [];
+            products = products.filter(product => product.id !== productId);
+            localStorage.setItem('products', JSON.stringify(products));
+            renderProductList();
+        }
+    }
+
+    // Sửa sản phẩm
+    function editProduct(productId) {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const productToEdit = products.find(product => product.id === productId);
+
+        if (productToEdit) {
+            // Hiển thị thông tin sản phẩm lên form để người dùng chỉnh sửa
+            document.getElementById('product-name').value = productToEdit.name;
+            document.getElementById('product-price').value = productToEdit.price;
+            // Lưu ý: Việc hiển thị lại ảnh để sửa có thể phức tạp hơn, tùy thuộc vào cách bạn xử lý ảnh
+            document.getElementById('product-quantity').value = productToEdit.quantity;
+            document.getElementById('product-description').value = productToEdit.description;
+            document.getElementById('product-type').value = productToEdit.type;
+
+            // Thay đổi nút "Thêm sản phẩm" thành "Lưu thay đổi" và thêm một input ẩn để lưu ID sản phẩm đang sửa
+            const submitButton = document.querySelector('#add-product-form button[type="submit"]');
+            submitButton.textContent = 'Lưu thay đổi';
+
+            let hiddenIdInput = document.getElementById('edit-product-id');
+            if (!hiddenIdInput) {
+                hiddenIdInput = document.createElement('input');
+                hiddenIdInput.type = 'hidden';
+                hiddenIdInput.id = 'edit-product-id';
+                document.getElementById('add-product-form').appendChild(hiddenIdInput);
+            }
+            hiddenIdInput.value = productId;
+
+            // Thay đổi hành động của form khi ở chế độ sửa
+            document.getElementById('add-product-form').removeEventListener('submit', handleAddProduct);
+            document.getElementById('add-product-form').addEventListener('submit', handleEditSubmit);
+        }
+    }
+
+    // Hàm xử lý sự kiện submit khi sửa sản phẩm
+    function handleEditSubmit(event) {
+        event.preventDefault();
+
+        const productId = parseInt(document.getElementById('edit-product-id').value);
+        const name = document.getElementById('product-name').value;
+        const price = parseFloat(document.getElementById('product-price').value);
+        const quantity = parseInt(document.getElementById('product-quantity').value);
+        const description = document.getElementById('product-description').value;
+        const type = document.getElementById('product-type').value;
+        const imageInput = document.getElementById('product-image');
+        const imageFile = imageInput.files[0];
+        let updatedImageURL = tempImageURL; // Sử dụng URL tạm thời nếu có ảnh mới
+
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        const updatedProducts = products.map(product => {
+            if (product.id === productId) {
+                return {
+                    id: productId,
+                    name: name,
+                    image: updatedImageURL || product.image, // Giữ nguyên ảnh cũ nếu không có ảnh mới
+                    price: price,
+                    quantity: quantity,
+                    description: description,
+                    type: type
+                };
+            }
+            return product;
+        });
+
+        localStorage.setItem('products', JSON.stringify(updatedProducts));
+        renderProductList();
+
+        // Reset form về trạng thái thêm mới
+        document.getElementById('add-product-form').reset();
+        const submitButton = document.querySelector('#add-product-form button[type="submit"]');
+        submitButton.textContent = 'Thêm sản phẩm';
+        const hiddenIdInput = document.getElementById('edit-product-id');
+        if (hiddenIdInput) {
+            hiddenIdInput.remove();
+        }
+        document.getElementById('add-product-form').removeEventListener('submit', handleEditSubmit);
+        document.getElementById('add-product-form').addEventListener('submit', handleAddProduct);
+        tempImageURL = ''; // Reset URL tạm thời
+    }
+
+    // *** Quản lý Đơn hàng Vé Workshop ***
+    function renderVeOrders() {
+        const orderListElement = document.getElementById('ve-list');
+        orderListElement.innerHTML = '';
+
+        const orders = JSON.parse(localStorage.getItem('veOrders')) || [];
+
+        orders.forEach(order => {
+            const row = orderListElement.insertRow();
+            row.insertCell().textContent = order.orderId;
+            row.insertCell().textContent = order.info.hoTen;
+            row.insertCell().textContent = order.info.email || '';
+            row.insertCell().textContent = order.info.ngayThamGia;
+            row.insertCell().textContent = order.quantity;
+            row.insertCell().textContent = order.info.goiThamGia;
+            row.insertCell().textContent = order.info.yTuongThietKe || '';
+            row.insertCell().textContent = order.info.phuongThucThanhToan;
+            row.insertCell().innerHTML = '<button class="view-button">Xem chi tiết</button>';
+        });
+    }
+
+    // *** Quản lý Đơn hàng Thiết kế ***
+    function renderThietKeOrders() {
+        const orderListElement = document.getElementById('thietke-list');
+        orderListElement.innerHTML = '';
+
+        const orders = JSON.parse(localStorage.getItem('thietKeOrders')) || [];
+
+        orders.forEach(order => {
+            const row = orderListElement.insertRow();
+            row.insertCell().textContent = order.orderId;
+            row.insertCell().textContent = order.ten;
+            row.insertCell().textContent = order.sdt;
+            row.insertCell().textContent = order.diachi;
+            row.insertCell().textContent = order.sanPham;
+            row.insertCell().textContent = order.soLuong;
+            row.insertCell().textContent = order.goiSanPham;
+            row.insertCell().textContent = order.coMayKho ? 'Có' : 'Không';
+            row.insertCell().textContent = order.tongTien;
+            row.insertCell().textContent = order.moTaThietKe;
+            row.insertCell().textContent = order.phuongThucThanhToan;
+            row.insertCell().innerHTML = '<button class="view-button">Xem chi tiết</button>';
+        });
+    }
+
+    // *** Quản lý Đơn hàng Thanh toán ***
+    function renderThanhToanOrders() {
+        const orderListElement = document.getElementById('thanhtoan-list');
+        orderListElement.innerHTML = '';
+
+        const orders = JSON.parse(localStorage.getItem('thanhToanOrders')) || [];
+
+        orders.forEach(order => {
+            const row = orderListElement.insertRow();
+            row.insertCell().textContent = order.orderId;
+            row.insertCell().textContent = order.name;
+            row.insertCell().textContent = order.address;
+            row.insertCell().textContent = order.phone;
+            row.insertCell().textContent = order.paymentMethod;
+            row.insertCell().textContent = order.totalAmount;
+            row.insertCell().textContent = order.cartItems.map(item => `${item.name} (${item.quantity})`).join(', ');
+            row.insertCell().innerHTML = '<button class="view-button">Xem chi tiết</button>';
+        });
+    }
+
+    // *** Quản lý Yêu cầu Hợp tác ***
+    function renderHopTacRequests() {
+        const requestListElement = document.getElementById('hoptac-list');
+        requestListElement.innerHTML = '';
+
+        const requests = JSON.parse(localStorage.getItem('hopTacRequests')) || [];
+
+        requests.forEach(request => {
+            const row = requestListElement.insertRow();
+            row.insertCell().textContent = request.requestId;
+            row.insertCell().textContent = request.tenDonVi;
+            row.insertCell().textContent = request.nguoiDaiDien;
+            row.insertCell().textContent = request.chucVu;
+            row.insertCell().textContent = request.email;
+            row.insertCell().textContent = request.sdt;
+            row.insertCell().textContent = request.noiDungHopTac;
+            row.insertCell().textContent = request.soLuongThamGia;
+            row.insertCell().textContent = request.nganSachDuKien;
+            row.insertCell().innerHTML = '<button class="view-button">Xem chi tiết</button>';
+        });
+    }
+
+    // Gọi các hàm hiển thị khi trang tải
+    renderProductList();
+    renderVeOrders();
+    renderThietKeOrders();
+    renderThanhToanOrders();
+    renderHopTacRequests();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt hàng thiết kế riêng - KEYCHAIN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            background-color: #fffdf7;
+            color: #333;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #ff6b81;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            background-color: #fffaf6;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group h2 {
+            color: #ff6b81;
+            margin-bottom: 1rem;
+            text-align: left;
+            font-size: 1.4rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff6b81;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        select,
+        input[type="number"],
+        textarea {
+            width: calc(100% - 16px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+            margin-bottom: 0;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .radio-group label {
+            display: inline-block;
+            font-weight: normal;
+            margin-right: 0;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        #combo_options {
+            margin-left: 0;
+            padding-left: 20px;
+            border-left: 2px solid #ff6b81;
+        }
+
+        #combo_options h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .combo-options .radio-group {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .combo-options label {
+            margin-bottom: 0.5rem;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #ff6b81;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+            width: 100%;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #ff1493;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #total-price {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffecec;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ff6b81;
+            text-align: center;
+        }
+
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        select:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #ff6b81;
+            box-shadow: 0 0 0 2px rgba(255, 107, 129, 0.25);
+            outline: none;
+        }
+
+        .order-success {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e6ffe6;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #28a745;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        .order-id {
+            font-weight: normal;
+            font-size: 1rem;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        #thong_tin_chuyen_khoan {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        #thong_tin_chuyen_khoan p {
+            margin-bottom: 5px;
+        }
+
+        #thong_tin_chuyen_khoan strong {
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .form-group {
+                padding: 15px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .radio-group label {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+
+            #combo_options {
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1><i class="fas fa-palette" style="color: #ff6b81;"></i> Đặt hàng thiết kế riêng</h1>
+
+    <form id="thietKeForm">
+        <div class="form-group">
+            <h2>Thông tin liên hệ</h2>
+            <label for="ten">Tên của bạn:</label>
+            <input type="text" id="ten" name="ten" required>
+            <label for="sdt">Số điện thoại liên hệ:</label>
+            <input type="tel" id="sdt" name="sdt" required>
+            <label for="diachi">Địa chỉ nhận hàng:</label>
+            <input type="text" id="diachi" name="diachi" required>
+        </div>
+
+        <div class="form-group">
+            <h2>Chọn gói sản phẩm</h2>
+            <div class="radio-group">
+                <input type="radio" id="goi_thanh_pham" name="goi_san_pham" value="thanh_pham" checked>
+                <label for="goi_thanh_pham">Nhận về thành phẩm hoàn chỉnh</label>
+                <input type="radio" id="goi_combo" name="goi_san_pham" value="combo">
+                <label for="goi_combo">Combo tự làm (+50.000 VND phí thiết kế)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h2>Chọn sản phẩm bạn muốn thiết kế</h2>
+            <label for="san_pham">Sản phẩm:</label>
+            <select id="san_pham" name="san_pham" required>
+                <option value="">-- Vui lòng chọn --</option>
+                <option value="Móc khoá">Móc khoá</option>
+                <option value="Sticker">Sticker</option>
+                <option value="Nam châm">Nam châm</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="combo_options" style="display: none;">
+            <h2>Tùy chọn thêm cho Combo</h2>
+            <div class="radio-group combo-options">
+                <input type="checkbox" id="combo_co_kho" name="combo_co_kho" value="co">
+                <label for="combo_co_kho">+ Thêm máy khò (+100.000 VND)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="so_luong">Số lượng bạn muốn:</label>
+            <input type="number" id="so_luong" name="so_luong" value="1" min="1">
+        </div>
+
+        <div class="form-group">
+            <label for="mo_ta_thiet_ke">Mô tả ý tưởng thiết kế của bạn (hoặc link Drive ảnh - nhớ cấp quyền truy cập nhé!):</label>
+            <textarea id="mo_ta_thiet_ke" name="mo_ta_thiet_ke" rows="5"
+                placeholder="Hãy mô tả chi tiết ý tưởng thiết kế mà bạn mong muốn, hoặc dán link Drive ảnh vào đây. Đừng quên cấp quyền truy cập cho KEYCHAIN để tụi mình xem được nha!"></textarea>
+        </div>
+
+        <div class="form-group">
+            <h2>Phương thức thanh toán</h2>
+            <div class="radio-group">
+                <input type="radio" id="thanh_toan_khi_nhan_hang" name="phuong_thuc_thanh_toan" value="COD" checked>
+                <label for="thanh_toan_khi_nhan_hang">Thanh toán khi nhận hàng (COD)</label>
+            </div>
+            <div class="radio-group">
+                <input type="radio" id="thanh_toan_chuyen_khoan" name="phuong_thuc_thanh_toan" value="chuyen_khoan">
+                <label for="thanh_toan_chuyen_khoan">Chuyển khoản ngân hàng</label>
+            </div>
+            <div id="thong_tin_chuyen_khoan" style="display: none; margin-top: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
+                <p style="margin-bottom: 5px;"><strong>Thông tin chuyển khoản:</strong></p>
+                <p style="margin-bottom: 5px;">Ngân hàng: [Tên ngân hàng]</p>
+                <p style="margin-bottom: 5px;">Số tài khoản: [Số tài khoản]</p>
+                <p style="margin-bottom: 5px;">Tên tài khoản: [Tên chủ tài khoản]</p>
+                <p>Vui lòng ghi rõ mã đơn hàng khi chuyển khoản.</p>
+            </div>
+        </div>
+
+        <div id="total-price">
+            Tổng tiền ước tính: 0 VND (bao gồm phí ship 20.000 VND)
+        </div>
+
+        <button type="submit">Gửi yêu cầu thiết kế</button>
+    </form>
+
+    <div class="order-success" id="orderSuccessMessage">
+        <i class="fas fa-check-circle" style="font-size: 2em; margin-bottom: 10px;"></i><br>
+        Tuyệt vời! Yêu cầu thiết kế của bạn đã được gửi thành công!<br>
+        Mã đơn hàng của bạn là: <span id="orderId" class="order-id"></span><br>
+        KEYCHAIN sẽ liên hệ với bạn sớm nhất để trao đổi thêm về thiết kế nha!
+    </div>
+
+    <script>
+        const goiThanhPhamRadio = document.getElementById('goi_thanh_pham');
+        const goiComboRadio = document.getElementById('goi_combo');
+        const sanPhamSelect = document.getElementById('san_pham');
+        const comboOptionsDiv = document.getElementById('combo_options');
+        const comboCoKhoCheckbox = document.getElementById('combo_co_kho');
+        const soLuongInput = document.getElementById('so_luong');
+        const totalPriceDiv = document.getElementById('total-price');
+        const orderSuccessMessageDiv = document.getElementById('orderSuccessMessage');
+        const orderIdSpan = document.getElementById('orderId');
+        const thietKeForm = document.getElementById('thietKeForm');
+        const tenInput = document.getElementById('ten');
+        const sdtInput = document.getElementById('sdt');
+        const diachiInput = document.getElementById('diachi');
+        const moTaThietKeInput = document.getElementById('mo_ta_thiet_ke');
+        const thanhToanChuyenKhoanRadio = document.getElementById('thanh_toan_chuyen_khoan');
+        const thongTinChuyenKhoanDiv = document.getElementById('thong_tin_chuyen_khoan');
+        const thanhToanKhiNhanHangRadio = document.getElementById('thanh_toan_khi_nhan_hang');
+
+        const phiThietKeCombo = 50000;
+        const giaMayKho = 100000;
+        const PHI_SHIP = 20000; // Phí ship
+
+        function tinhTongTien() {
+            let tongTien = 0;
+            const goiSanPham = document.querySelector('input[name="goi_san_pham"]:checked').value;
+            const sanPham = sanPhamSelect.value;
+            const soLuong = parseInt(soLuongInput.value) || 0;
+            const coMayKho = comboCoKhoCheckbox.checked;
+
+            if (goiSanPham === 'thanh_pham') {
+                if (sanPham === 'Móc khoá') {
+                    tongTien = 40000 * soLuong;
+                } else if (sanPham === 'Sticker') {
+                    tongTien = 20000 * soLuong;
+                } else if (sanPham === 'Nam châm') {
+                    tongTien = 45000 * soLuong;
+                }
+            } else if (goiSanPham === 'combo') {
+                let giaSanPhamCombo = 0;
+                if (sanPham === 'Móc khoá') {
+                    giaSanPhamCombo = 60000;
+                } else if (sanPham === 'Sticker') {
+                    giaSanPhamCombo = 30000;
+                } else if (sanPham === 'Nam châm') {
+                    giaSanPhamCombo = 65000;
+                }
+                tongTien = (giaSanPhamCombo * soLuong) + phiThietKeCombo;
+                if (coMayKho) {
+                    tongTien += giaMayKho;
+                }
+            }
+
+            totalPriceDiv.textContent = `Tổng tiền ước tính: ${ (tongTien + PHI_SHIP).toLocaleString('vi-VN')} VND (bao gồm phí ship ${PHI_SHIP.toLocaleString('vi-VN')} VND)`;
+        }
+
+        // Ẩn/hiện tùy chọn combo
+        goiComboRadio.addEventListener('change', function () {
+            comboOptionsDiv.style.display = this.checked ? 'block' : 'none';
+            tinhTongTien();
+        });
+
+        goiThanhPhamRadio.addEventListener('change', function () {
+            comboOptionsDiv.style.display = 'none';
+            tinhTongTien();
+        });
+
+        // Tính tổng tiền khi chọn sản phẩm, số lượng và tùy chọn combo thay đổi
+        sanPhamSelect.addEventListener('change', tinhTongTien);
+        soLuongInput.addEventListener('input', tinhTongTien);
+        comboCoKhoCheckbox.addEventListener('change', tinhTongTien);
+
+        // Tính tổng tiền ban đầu
+        tinhTongTien();
+
+        // Ẩn/hiện thông tin chuyển khoản
+        thanhToanChuyenKhoanRadio.addEventListener('change', function () {
+            thongTinChuyenKhoanDiv.style.display = this.checked ? 'block' : 'none';
+        });
+
+        thanhToanKhiNhanHangRadio.addEventListener('change', function () {
+            thongTinChuyenKhoanDiv.style.display = 'none';
+        });
+
+        function generateOrderId() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let orderId = '';
+            for (let i = 0; i < 10; i++) {
+                orderId += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return orderId;
+        }
+        function submitOrder(event) {
+            event.preventDefault();
+
+            const ten = tenInput.value;
+            const sdt = sdtInput.value;
+            const diachi = diachiInput.value;
+            const moTaThietKe = moTaThietKeInput.value;
+            const goiSanPham = document.querySelector('input[name="goi_san_pham"]:checked').value;
+            const sanPham = sanPhamSelect.value;
+            const soLuong = parseInt(soLuongInput.value) || 0;
+            const coMayKho = comboCoKhoCheckbox.checked;
+            const phuongThucThanhToan = document.querySelector('input[name="phuong_thuc_thanh_toan"]:checked').value;
+            let tongTien = 0;
+
+            if (goiSanPham === 'thanh_pham') {
+                if (sanPham === 'Móc khoá') {
+                    tongTien = 40000 * soLuong;
+                } else if (sanPham === 'Sticker') {
+                    tongTien = 20000 * soLuong;
+                } else if (sanPham === 'Nam châm') {
+                    tongTien = 45000 * soLuong;
+                }
+            } else if (goiSanPham === 'combo') {
+                let giaSanPhamCombo = 0;
+                if (sanPham === 'Móc khoá') {
+                    giaSanPhamCombo = 60000;
+                } else if (sanPham === 'Sticker') {
+                    giaSanPhamCombo = 30000;
+                } else if (sanPham === 'Nam châm') {
+                    giaSanPhamCombo = 65000;
+                }
+                tongTien = (giaSanPhamCombo * soLuong) + phiThietKeCombo;
+                if (coMayKho) {
+                    tongTien += giaMayKho;
+                }
+            }
+            const tongTienDonHang = tongTien + PHI_SHIP;
+
+
+            if (ten && sdt && diachi && sanPham && soLuong > 0) {
+                const orderId = generateOrderId();
+                orderIdSpan.textContent = orderId;
+                thietKeForm.style.display = 'none';
+                orderSuccessMessageDiv.style.display = 'block';
+
+                const orderDetails = {
+                    type: 'thietke',
+                    orderId: orderId,
+                    ten: ten,
+                    sdt: sdt,
+                    diachi: diachi,
+                    moTaThietKe: moTaThietKe,
+                    goiSanPham: goiSanPham,
+                    sanPham: sanPham,
+                    soLuong: soLuong,
+                    tongTien: tongTienDonHang,
+                    coMayKho: coMayKho,
+                    phuongThucThanhToan: phuongThucThanhToan
+                };
+
+                let thietKeOrders = localStorage.getItem('thietKeOrders');
+                if (thietKeOrders) {
+                    thietKeOrders = JSON.parse(thietKeOrders);
+                    thietKeOrders.push(orderDetails);
+                } else {
+                    thietKeOrders = [orderDetails];
+                }
+                localStorage.setItem('thietKeOrders', JSON.stringify(thietKeOrders));
+
+                console.log('Thông tin đơn hàng đã gửi:', orderDetails);
+                // alert(`Đặt hàng thành công! Mã đơn hàng của bạn là: ${orderId}`);
+                // window.location.href = 'web.html'; // Không chuyển trang nữa.
+            } else {
+                alert('Bạn ơi, vui lòng điền đầy đủ thông tin và chọn sản phẩm/số lượng nha!');
+            }
+        }
+
+        thietKeForm.addEventListener('submit', submitOrder);
+    </script>
+</body>
+
+</html>

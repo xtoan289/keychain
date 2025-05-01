@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hợp tác tổ chức sự kiện ngoại khoá - KEYCHAIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #fffdf7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(to right, #ffdee9, #b5fffc);
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #ff6b81;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+
+        nav {
+            background: #fff;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 1.3rem;
+            list-style: none;
+            margin: 0;
+            padding: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-list>li {
+            position: relative;
+        }
+
+        .nav-list>li>a {
+            text-decoration: none;
+            color: #2d2d2d;
+            font-weight: 600;
+            font-size: 1.07rem;
+            padding: 7px 8px;
+            border-radius: 0.5rem;
+            transition: background 0.15s, color 0.15s;
+            display: inline-block;
+        }
+
+        .nav-list>li>a:hover,
+        .nav-list>li.active>a {
+            background: #ffdee9;
+            color: #ff6b81;
+        }
+
+        .nav-list li .dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            min-width: 180px;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            border-radius: 0 0 0.5rem 0.5rem;
+            z-index: 999;
+            margin-top: 2px;
+            padding: 0.3rem 0;
+        }
+
+        .nav-list li:hover .dropdown,
+        .nav-list li:focus-within .dropdown {
+            display: block;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.55rem 1.2rem;
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 0.25rem;
+            transition: background 0.1s, color 0 .1s;
+        }
+
+        .dropdown a:hover {
+            background: #ffdee9;
+            color: #ff6b81;
+        }
+
+        .section {
+            padding: 2rem 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            color: #ff6b81;
+            margin-bottom: 1rem;
+        }
+
+        .form-container {
+            background: #fffaf6;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-container label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .form-container button {
+            margin-top: 2rem;
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #ff6b81;
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: #ffecec;
+            color: #555;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+            color: #ff6b81;
+            font-weight: bold;
+        }
+
+        .container a {
+            color: #ff1493;
+            text-decoration: underline;
+        }
+
+        .collaboration-info {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .collaboration-info h2 {
+            margin-top: 0;
+        }
+
+        .collaboration-info ul {
+            list-style: disc;
+            margin-left: 20px;
+        }
+
+        .collaboration-info li {
+            margin-bottom: 0.5rem;
+        }
+
+        .request-success {
+            margin-top: 20px;
+            padding: 2rem;
+            /* Tăng padding để tạo hiệu ứng to hơn */
+            background-color: #e6ffe6;
+            /* Nền xanh lá cây nhạt */
+            border-radius: 1rem;
+            /* Góc bo tròn lớn hơn */
+            font-size: 1.2rem;
+            /* Chữ lớn hơn */
+            font-weight: bold;
+            color: #28a745;
+            /* Chữ xanh lá cây */
+            text-align: center;
+            border: 2px solid #c3e6cb;
+            /* Viền dày hơn */
+            display: none;
+            /* Ẩn thông báo thành công ban đầu */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            /* Đổ bóng để nổi bật */
+            animation: fadeIn 1s ease-in-out;
+            /* Thêm animation */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .request-id {
+            font-weight: normal;
+            font-size: 1rem;
+            color: #555;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Hợp tác tổ chức sự kiện ngoại khoá</h1>
+        <p>Cùng KEYCHAIN mang đến trải nghiệm workshop nhựa co nhiệt độc đáo và sáng tạo cho học sinh, sinh viên!</p>
+    </header>
+    <nav>
+        <ul class="nav-list">
+            <li><a href="web.html">TRANG CHỦ</a></li>
+            <li>
+                <a href="#">WORKSHOP <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                <div class="dropdown">
+                    <a href="dangky.html">Đăng ký Workshop</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">SẢN PHẨM <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                <div class="dropdown">
+                    <a href="sanpham/moc-khoa.html">Móc khoá cá nhân hoá</a>
+                    <a href="sanpham/nam-cham.html">Nam châm trang trí</a>
+                    <a href="sanpham/sticker.html">Sticker dán laptop</a>
+                    <a href="sanpham/mau-ve.html">Màu vẽ đi kèm</a>
+                    <a href="sanpham/may-kho.html">Máy khò co nhiệt</a>
+                    <a href="sanpham/nhua-co-nhiet.html">Miếng nhựa co nhiệt</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">THIẾT KẾ RIÊNG <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                <div class="dropdown">
+                    <a href="thietke.html?type=finish">Gửi thiết kế – nhận thành phẩm</a>
+                    <a href="thietke.html?type=combo">Combo thiết kế + DIY</a>
+                </div>
+            </li>
+            <li class="active"><a href="hoptac.html">HỢP TÁC</a></li>
+            <li><a href="#lien-he">LIÊN HỆ</a></li>
+        </ul>
+    </nav>
+    <section class="section">
+        <div class="collaboration-info">
+            <h2>Tại sao nên hợp tác với KEYCHAIN?</h2>
+            <ul>
+                <li><i class="fas fa-hand-holding-heart"></i> **Trải nghiệm độc đáo:** Workshop nhựa co nhiệt mang đến hoạt động mới lạ, kích thích sự sáng tạo và khéo léo của người tham gia.</li>
+                <li><i class="fas fa-paint-brush"></i> **Tính cá nhân hoá cao:** Học sinh, sinh viên được tự do thiết kế sản phẩm theo sở thích, tạo dấu ấn riêng.</li>
+                <li><i class="fas fa-users"></i> **Gắn kết cộng đồng:** Hoạt động nhóm giúp tăng cường sự tương tác, giao lưu giữa các thành viên.</li>
+                <li><i class="fas fa-graduation-cap"></i> **Học hỏi kỹ năng mới:** Người tham gia được hướng dẫn các kỹ thuật cơ bản, phát triển khả năng tư duy thiết kế.</li>
+                <li><i class="fas fa-coins"></i> **Chi phí hợp lý:** KEYCHAIN cung cấp các gói dịch vụ đa dạng, phù hợp với ngân sách của nhiều đơn vị.</li>
+            </ul>
+        </div>
+        <div class="form-container" id="hopTacFormContainer">
+            <h2>Gửi yêu cầu hợp tác</h2>
+            <form id="hopTacForm">
+                <label for="unitName">Tên đơn vị (Trường/CLB/Tổ chức):</label>
+                <input type="text" id="unitName" name="unitName" required>
+
+                <label for="representativeName">Tên người đại diện:</label>
+                <input type="text" id="representativeName" name="representativeName" required>
+
+                <label for="position">Chức vụ:</label>
+                <input type="text" id="position" name="position" required>
+
+                <label for="address">Địa chỉ:</label>
+                <input type="text" id="address" name="address" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Số điện thoại:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="collaborationDetails">Nội dung hợp tác mong muốn:</label>
+                <textarea id="collaborationDetails" name="collaborationDetails" rows="4" required></textarea>
+
+                <label for="participants">Số lượng người tham gia dự kiến:</label>
+                <input type="number" id="participants" name="participants" min="1" value="1" required>
+
+                <label for="budget">Ngân sách dự kiến (nếu có):</label>
+                <input type="text" id="budget" name="budget">
+
+                <button type="submit">Gửi yêu cầu</button>
+            </form>
+        </div>
+
+        <div class="request-success" id="requestSuccessMessage">
+            <i class="fas fa-check-circle" style="font-size: 2em; margin-bottom: 10px;"></i><br>
+            Cảm ơn quý đơn vị đã gửi yêu cầu hợp tác đến KEYCHAIN!<br>
+            Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất để trao đổi chi tiết nhé!
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 KEYCHAIN. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function generateRequestId() {
+            const timestamp = Date.now().toString(36);
+            const randomPart = Math.random().toString(36).substring(2, 7);
+            return `HT-${timestamp}-${randomPart.toUpperCase()}`;
+        }
+
+        function saveHopTacRequest(event) {
+            event.preventDefault();
+
+            const unitName = document.getElementById('unitName').value;
+            const representativeName = document.getElementById('representativeName').value;
+            const position = document.getElementById('position').value;
+            const address = document.getElementById('address').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const collaborationDetails = document.getElementById('collaborationDetails').value;
+            const participants = parseInt(document.getElementById('participants').value);
+            const budget = document.getElementById('budget').value;
+
+            if (unitName && representativeName && position && address && email && phone && collaborationDetails && participants) {
+                const requestId = generateRequestId();
+                // document.getElementById('requestId').textContent = requestId;  // Loại bỏ dòng này
+                document.getElementById('hopTacFormContainer').style.display = 'none';
+                document.getElementById('requestSuccessMessage').style.display = 'block';
+
+                const newRequest = {
+                    type: 'hoptac',
+                    requestId: requestId,
+                    tenDonVi: unitName,
+                    nguoiDaiDien: representativeName,
+                    chucVu: position,
+                    diaChi: address,
+                    email: email,
+                    sdt: phone,
+                    noiDungHopTac: collaborationDetails,
+                    soLuongThamGia: participants,
+                    nganSachDuKien: budget
+                };
+
+                let hopTacRequests = localStorage.getItem('hopTacRequests');
+                if (hopTacRequests) {
+                    hopTacRequests = JSON.parse(hopTacRequests);
+                    hopTacRequests.push(newRequest);
+                } else {
+                    hopTacRequests = [newRequest];
+                }
+                localStorage.setItem('hopTacRequests', JSON.stringify(hopTacRequests));
+
+                console.log('Thông tin yêu cầu hợp tác:', newRequest);
+                // alert(`Gửi yêu cầu hợp tác thành công! Mã yêu cầu của bạn là: ${requestId}`);
+                // window.location.href = 'web.html'; // Không chuyển trang
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin.');
+            }
+        }
+
+        // Thêm sự kiện submit cho form
+        const hopTacForm = document.getElementById('hopTacForm');
+        if (hopTacForm) {
+            hopTacForm.addEventListener('submit', saveHopTacRequest);
+        }
+    </script>
+</body>
+
+</html>

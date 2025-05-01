@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt vé Workshop | KEYCHAIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #fffdf7;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #ff6b81;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea,
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.3rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 2rem;
+            padding: 0.8rem;
+            background: #ff6b81;
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff8093;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+            color: #ff6b81;
+            font-weight: bold;
+        }
+
+        .container a {
+            color: #ff1493;
+            text-decoration: underline;
+        }
+
+        .back-home-btn {
+            display: block;
+            margin-top: 1rem;
+            padding: 0.6rem 1.2rem;
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-home-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        #order-confirmation {
+            display: none;
+            background-color: #f0f0f0;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b81;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .form-group {
+            margin-top: 1rem;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .radio-group input[type="radio"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎫 Đặt vé Workshop</h1>
+    <form id="formdk">
+        <label for="name">Họ và tên</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="date">Ngày tham gia</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="quantity">Số người</label>
+        <input type="number" id="quantity" name="quantity" min="1" value="1">
+
+        <label for="package">Gói tham gia</label>
+        <select id="package" name="package" required>
+            <option value="Gói cơ bản – 90.000đ/người">Gói cơ bản – 90.000đ/người</option>
+            <option value="Gói tiêu chuẩn – 140.000đ/người">Gói tiêu chuẩn – 140.000đ/người</option>
+        </select>
+
+        <label for="design">Ý tưởng thiết kế (tùy chọn) <br> <small>Chia sẻ ý tưởng hoặc link Drive ảnh (nhớ cấp quyền truy cập nhé!)</small></label>
+        <textarea id="design" name="design" rows="3" placeholder="VD: mình muốn làm móc khoá hình mèo hoặc link Drive ảnh..."></textarea>
+
+        <div class="form-group">
+            <h2>Phương thức thanh toán</h2>
+            <div class="radio-group">
+                <input type="radio" id="thanh_toan_khi_nhan_hang" name="phuong_thuc_thanh_toan" value="COD" checked>
+                <label for="thanh_toan_khi_nhan_hang">Thanh toán khi nhận hàng (COD)</label>
+            </div>
+            <div class="radio-group">
+                <input type="radio" id="thanh_toan_chuyen_khoan" name="phuong_thuc_thanh_toan" value="chuyen_khoan">
+                <label for="thanh_toan_chuyen_khoan">Chuyển khoản ngân hàng</label>
+            </div>
+            <div id="thong_tin_chuyen_khoan" style="display: none; margin-top: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
+                <p style="margin-bottom: 5px;"><strong>Thông tin chuyển khoản:</strong></p>
+                <p style="margin-bottom: 5px;">Ngân hàng: [Tên ngân hàng]</p>
+                <p style="margin-bottom: 5px;">Số tài khoản: [Số tài khoản]</p>
+                <p style="margin-bottom: 5px;">Tên tài khoản: [Tên chủ tài khoản]</p>
+                <p>Vui lòng ghi rõ mã đơn hàng khi chuyển khoản.</p>
+            </div>
+        </div>
+
+        <button type="button" onclick="saveVeRequest()">Gửi thông tin</button>
+    </form>
+
+    <div id="order-confirmation">
+        <p>🎉 Đặt vé thành công! 🎉</p>
+        <p>Mã đơn hàng của bạn là: <span id="orderId"></span></p>
+    </div>
+
+    <a href="web.html" class="back-home-btn"><i class="fa fa-home"></i> Quay về trang chủ</a>
+
+    <footer>
+        <p><strong>Liên hệ với chúng tôi:</strong></p>
+        <p>
+            📍 Địa chỉ: Ngũ Hành Sơn, Đà Nẵng<br>
+            📞 Hotline: <a href="tel:0943316898">094 331 68 98</a><br>
+            📧 Email: <a href="mailto:Keychainnhuaconhiet@gmail.com">Keychainnhuaconhiet@gmail.com</a><br>
+            🔗 Facebook: <a href="https://www.facebook.com/profile.php?id=61574633640361&locale=vi_VN" target="_blank">KEYCHAIN Fanpage</a><br>
+            🎵 TikTok: <a href="https://www.tiktok.com/@mockhoaconhiet_keychain" target="_blank">@mockhoaconhiet_keyCHAIN</a>
+        </p>
+    </footer>
+
+    <script>
+        function generateOrderId() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let orderId = '';
+            for (let i = 0; i < 10; i++) {
+                orderId += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return orderId;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const thanhToanChuyenKhoanRadio = document.getElementById('thanh_toan_chuyen_khoan');
+            const thongTinChuyenKhoanDiv = document.getElementById('thong_tin_chuyen_khoan');
+
+            thanhToanChuyenKhoanRadio.addEventListener('change', function() {
+                thongTinChuyenKhoanDiv.style.display = this.checked ? 'block' : 'none';
+            });
+        });
+
+        function saveVeRequest() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const date = document.getElementById('date').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const packageInfo = document.getElementById('package').value;
+            const design = document.getElementById('design').value;
+            const paymentMethodElements = document.querySelectorAll('input[name="phuong_thuc_thanh_toan"]');
+            let paymentMethod = '';
+            for (const radio of paymentMethodElements) {
+                if (radio.checked) {
+                    paymentMethod = radio.value;
+                    break;
+                }
+            }
+
+            let pricePerPerson = 0;
+            const packageName = packageInfo.split(' – ')[0];
+            if (packageName === 'Gói cơ bản') {
+                pricePerPerson = 90000;
+            } else if (packageName === 'Gói tiêu chuẩn') {
+                pricePerPerson = 140000;
+            }
+            const totalPrice = pricePerPerson * quantity;
+
+            if (name && email && date && quantity > 0 && packageInfo && paymentMethod) {
+                const orderId = generateOrderId();
+                document.getElementById('orderId').textContent = orderId;
+                document.getElementById('order-confirmation').style.display = 'block';
+
+                const newRequest = {
+                    type: 've',
+                    name: `Vé Workshop: ${packageName}`,
+                    quantity: quantity,
+                    price: totalPrice,
+                    info: {
+                        hoTen: name,
+                        email: email,
+                        ngayThamGia: date,
+                        goiThamGia: packageInfo,
+                        yTuongThietKe: design,
+                        phuongThucThanhToan: paymentMethod
+                    },
+                    orderId: orderId
+                };
+
+                let veOrders = localStorage.getItem('veOrders');
+                if (veOrders) {
+                    veOrders = JSON.parse(veOrders);
+                    veOrders.push(newRequest);
+                } else {
+                    veOrders = [newRequest];
+                }
+                localStorage.setItem('veOrders', JSON.stringify(veOrders));
+
+                document.getElementById('formdk').reset();
+                const codRadio = document.getElementById('thanh_toan_khi_nhan_hang');
+                if (codRadio) {
+                    codRadio.checked = true;
+                }
+                const thongTinCK = document.getElementById('thong_tin_chuyen_khoan');
+                if (thongTinCK) {
+                    thongTinCK.style.display = 'none';
+                }
+
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin và chọn phương thức thanh toán.');
+            }
+        }
+    </script>
+
+</body>
+
+</html>

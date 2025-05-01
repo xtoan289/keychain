@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả tìm kiếm - KEYCHAIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Toàn bộ CSS từ trang gốc */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #fffdf7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* HEADER MỚI */
+        .main-header {
+            background: linear-gradient(to right, #ffdee9, #b5fffc);
+            display: flex;
+            align-items: center;
+            padding: 0.7rem 2vw;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b81;
+            gap: 0.5rem;
+            user-select: none;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.5rem;
+        }
+
+        .header-search-group {
+            flex: 1 1 280px;
+            display: flex;
+            align-items: center;
+            max-width: 390px;
+            min-width: 230px;
+        }
+
+        .header-search-group input[type="text"] {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem 0 0 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .header-search-group button {
+            background: #ff6b81;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.5rem 0.9rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-actions .btn-watched {
+            background: #ffa502;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .header-actions .hotline {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f76a6a;
+            margin-right: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-actions .hotline small {
+            font-weight: 400;
+            color: #333;
+        }
+
+        .header-actions .icon-link {
+            color: #333;
+            font-size: 1.25rem;
+            margin: 0 0.3rem;
+            transition: color 0.15s;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .header-actions .icon-link:hover {
+            color: #ff6b81;
+        }
+
+        .header-actions .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6b81;
+            color: #fff;
+            font-size: 0.8rem;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-weight: bold;
+            border: 2px solid #fff;
+        }
+
+        nav {
+            background: #fff;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 1.3rem;
+            list-style: none;
+            margin: 0;
+            padding: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-list>li {
+            position: relative;
+        }
+
+        .nav-list>li>a {
+            text-decoration: none;
+            color: #2d2d2d;
+            font-weight: 600;
+            font-size: 1.07rem;
+            padding: 7px 8px;
+            border-radius: 0.5rem;
+            transition: background 0.15s, color 0.15s;
+            display: inline-block;
+        }
+
+        .nav-list>li>a:hover,
+        .nav-list>li.active>a {
+            background: #f7b2d9;
+            color: #ff6b81;
+        }
+
+        .nav-list li .dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            min-width: 180px;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            border-radius: 0 0 0.5rem 0.5rem;
+            z-index: 999;
+            margin-top: 2px;
+            padding: 0.3rem 0;
+        }
+
+        .nav-list li:hover .dropdown,
+        .nav-list li:focus-within .dropdown {
+            display: block;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.55rem 1.2rem;
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 0.25rem;
+            transition: background 0.1s, color 0 .1s;
+        }
+
+        .dropdown a:hover {
+            background: #ffdee9;
+            color: #ff6b81;
+        }
+
+        @media (max-width: 900px) {
+            .main-header {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: stretch;
+            }
+
+            .header-search-group {
+                max-width: none;
+            }
+
+            .header-actions {
+                justify-content: flex-start;
+            }
+
+            nav {
+                padding: 0 0.5rem;
+            }
+
+            .nav-list {
+                gap: 0.7rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .main-header {
+                padding: 0.7rem 1vw;
+            }
+
+            .header-search-group input[type="text"] {
+                font-size: 0.98rem;
+            }
+
+            .header-actions .btn-watched {
+                font-size: 0.9rem;
+                padding: 0.45rem 0.7rem;
+            }
+
+            .header-actions .hotline {
+                font-size: 0.98rem;
+            }
+
+            .nav-list>li>a {
+                font-size: 0.97rem;
+                padding: 7px 4px;
+            }
+
+            .dropdown a {
+                font-size: 0.95rem;
+                padding: 0.45rem 0.8rem;
+            }
+        }
+
+        /* Style cho phần kết quả tìm kiếm */
+        #search-results {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding: 2rem 1.5rem;
+        }
+
+        #search-results .card {
+            background: #fff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 200px;
+            text-align: center;
+            padding: 1rem;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            cursor: pointer;
+            /* Thêm con trỏ chuột để báo hiệu có thể nhấp */
+        }
+
+        #search-results .card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 0.75rem;
+            max-width: 100%;
+        }
+
+        #search-results .card .item-name {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        #search-results .card .item-price {
+            color: #ff6b81;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        #search-results .card .btn {
+            background: #ff6b81;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-top: 1rem;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .no-results {
+            color: red;
+            font-style: italic;
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="main-header">
+            <a href="/" class="logo">
+                <img src="https://scontent.fdad2-1.fna.fbcdn.net/v/t39.30808-6/491136367_122112770036821121_2934017208201932214_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=kcGJeO-YhIcQ7kNvwFCUi7G&_nc_oc=Adl9r7SaGuSIXZeY8p_Rb2qjqWHjKEHcs0bBcCkv-w6G1tg_ZA15eaelSBjBro9eTzSfQL6Pl6D0_RGopC33ViHz&_nc_zt=23&_nc_ht=scontent.fdad2-1.fna&_nc_gid=JvugNfOlvpC5EkVKjoS1wQ&oh=00_AfF89_un4IGLlA9Vx6RmNTY8oEfJjezFWo9rlRWko_3q4g&oe=6806FD8F"
+                    alt="KEYCHAIN">
+                NHỰA CO NHIỆT KEYCHAIN
+            </a>
+            <form class="header-search-group" action="/timkiem.html">
+                <input type="text" name="q" placeholder="Bạn muốn tìm gì?">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+            <div class="header-actions">
+                <button class="btn-watched"><i class="fa fa-clock"></i> Đã xem</button>
+                <div class="hotline">
+                    094 331 68 98
+                    <small>Liên hệ</small>
+                </div>
+                <a href="/tai-khoan.html" class="icon-link" title="Tài khoản"><i class="fa fa-user"></i></a>
+                <a href="giohang.html" class="icon-link" title="Giỏ hàng">
+                    <i class="fa fa-shopping-bag"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+        <nav>
+            <ul class="nav-list">
+                <li class="active"><a href="/">TRANG CHỦ</a></li>
+                <li>
+                    <a href="#">WORKSHOP <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                    <div class="dropdown">
+                        <a href="ve.html">Đăng ký Workshop</a>
+                
+                    </div>
+                </li>
+                <li>
+                    <a href="#">SẢN PHẨM <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                    <div class="dropdown">
+                        <a href="sanpham/moc-khoa.html">Móc khoá cá nhân hoá</a>
+                        <a href="sanpham/nam-cham.html">Nam châm trang trí</a>
+                        <a href="sanpham/sticker.html">Sticker dán laptop</a>
+                        <a href="sanpham/mau-ve.html">Màu vẽ đi kèm</a>
+                        <a href="sanpham/may-kho.html">Máy khò co nhiệt</a>
+                        <a href="sanpham/nhua-co-nhiet.html">Miếng nhựa co nhiệt</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#">THIẾT KẾ RIÊNG <i class="fa fa-chevron-down" style="font-size:0.8em"></i></a>
+                    <div class="dropdown">
+                        <a href="sanpham/thiet-ke-thanh-pham.html">Gửi thiết kế – nhận thành phẩm</a>
+                        <a href="sanpham/combo-diy.html">Combo thiết kế + DIY</a>
+                    </div>
+                </li>
+                <li><a href="hoptac.html">HỢP TÁC</a></li>
+                <li><a href="#lien-he">LIÊN HỆ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="section">
+        <h2>Kết quả tìm kiếm</h2>
+        <div id="search-results">
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>Liên hệ với chúng tôi:</strong></p>
+        <p>
+            📍 Địa chỉ: Ngũ Hành Sơn, Đà Nẵng<br>
+            📞 Đường dây nóng: <a href="tel:0943316898">094 331 68 98</a><br>
+            📧 Email: <a href="mailto:Keychainnhuaconhiet@gmail.com">Keychainnhuaconhiet@gmail.com</a><br>
+            🔗 Facebook: <a href="https://www.facebook.com/profile.php?id=61574633640361&locale=vi_VN"
+                target="_blank">Fanpage KEYCHAIN</a><br>
+            🎵 TikTok: <a href="https://www.tiktok.com/@mockhoaconhiet_keychain" target="_blank">@mockhoaconhiet_keychain</a>
+        </p>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q');
+        const searchResultsDiv = document.getElementById('search-results');
+
+        function displayResults(results) {
+            if (results.length === 0) {
+                searchResultsDiv.innerHTML = `<p class="no-results">Không tìm thấy mục nào phù hợp với từ khóa: <strong>${searchQuery}</strong></p>`;
+            } else {
+                const resultsHtml = results.map(item => `
+                    <div class="card" data-link="${item.link || '/'}">
+                        ${item.image ? `<img src="${item.image}" alt="${item.name}">` : ''}
+                        <div class="card-body">
+                            <p class="item-name">${item.name}</p>
+                            ${item.price !== null ? `<p class="item-price">${item.price} VND</p>` : ''}
+                            <p class="item-description">${item.description || ''}</p>
+                            <a href="${item.link || '/'}" class="btn">Xem ngay</a>
+                        </div>
+                    </div>
+                `).join('');
+                searchResultsDiv.innerHTML = resultsHtml;
+
+                // Thêm sự kiện click cho mỗi card sau khi đã hiển thị
+                const cards = document.querySelectorAll('#search-results .card');
+                cards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        const link = this.dataset.link;
+                        if (link) {
+                            window.location.href = link;
+                        }
+                    });
+                });
+            }
+        }
+
+        async function performSearch(query) {
+            const allSearchableItems = [
+                { name: 'Trang chủ', description: 'Trang chủ của website KEYCHAIN', link: '/' },
+                { name: 'Workshop Nhựa Co Nhiệt', description: 'Thông tin về workshop nhựa co nhiệt', link: 'dang-ky.html' },
+                { name: 'Đăng ký Workshop', description: 'Form đăng ký tham gia workshop', link: 'dang-ky.html' },
+                { name: 'Thànhquả sau Workshop', description: 'Hình ảnh và mô tả thành quả workshop', link: '/#thanh-qua' },
+                { name: 'Hợp tác tổ chức sự kiện', description: 'Thông tin về hợp tác tổ chức sự kiện ngoại khóa', link: 'hoptac.html' },
+                { name: 'Liên hệ KEYCHAIN', description: 'Thông tin liên hệ với KEYCHAIN', link: '/#lien-he' },
+                { name: 'Móc khoá cá nhân hoá', description: 'Các mẫu móc khoá nhựa co nhiệt có thể cá nhân hoá', image: 'https://i.imgur.com/tXSGzKJ.png', link: 'sanpham/moc-khoa.html' },
+                { name: 'Nam châm trang trí', description: 'Các mẫu nam châm nhựa co nhiệt dùng để trang trí', image: 'https://i.imgur.com/CikN0qC.png', link: 'sanpham/nam-cham.html' },
+                { name: 'Sticker dán laptop dễ thương', description: 'Các loại sticker nhựa co nhiệt để dán laptop', image: 'https://i.imgur.com/8wz3oFv.png', link: 'sanpham/sticker.html' },
+                { name: 'Màu vẽ đi kèm', description: 'Các loại màu vẽ chuyên dụng cho nhựa co nhiệt', image: 'https://i.imgur.com/2IXY7Y0.png', link: 'sanpham/mau-ve.html' },
+                { name: 'Máy khò co nhiệt', description: 'Máy khò nhiệt dùng để làm co miếng nhựa', image: 'https://i.imgur.com/F62ol9J.png', link: 'sanpham/may-kho.html' },
+                { name: 'Miếng nhựa co nhiệt', description: 'Các loại miếng nhựa co nhiệt với kích thước và màu sắc khác nhau', image: 'https://i.imgur.com/l7z0r1S.png', link: 'sanpham/nhua-co-nhiet.html' },
+                { name: 'Gửi thiết kế – nhận thành phẩm', description: 'Dịch vụ nhận thiết kế riêng và tạo thành phẩm', image: 'https://i.imgur.com/gIxfxLR.png', link: 'sanpham/thiet-ke-thanh-pham.html' },
+                { name: 'Combo thiết kế + DIY tại nhà', description: 'Combo vật liệu và hướng dẫn để tự thiết kế và làm tại nhà', image: 'https://i.imgur.com/qVqScsY.png', link: 'sanpham/combo-diy.html' },
+            ];
+
+            const results = allSearchableItems.filter(item =>
+                item.name.toLowerCase().includes(query.toLowerCase()) ||
+                item.description.toLowerCase().includes(query.toLowerCase())
+            );
+
+            displayResults(results);
+        }
+
+        // Execute search if there is a query
+        if (searchQuery) {
+            performSearch(searchQuery);
+        } else {
+            displayResults([]); // Show no results message if there is no query
+        }
+    </script>
+
+</body>
+
+</html>
